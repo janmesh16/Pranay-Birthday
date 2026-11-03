@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0b0f;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  min-height: 100dvh;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area insets for notched iPhones and mobile navigation bars */
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.safe-left {
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+}
+.safe-right {
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+
+/* Dynamic Viewport Height Utilities */
+.h-dvh {
+  height: 100dvh;
+}
+.min-h-dvh {
+  min-height: 100dvh;
+}
+
+/* Custom scrollbar hiding with smooth iOS touch momentum scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Netflix-style horizontal row snap */
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+}
+.snap-start-card {
+  scroll-snap-align: start;
+}
+
+/* Minimum 44px tap target helper (Apple HIG & Material Design standard) */
+.min-tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Original PRANAYFLIX Wordmark */
+.pranayflix-logo {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  letter-spacing: 0.08em;
+  color: #E50914;
+  text-shadow: 0 2px 10px rgba(229, 9, 20, 0.4);
+  background: linear-gradient(180deg, #FF1E27 0%, #B80610 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transform: scaleY(1.08);
+}
+
+/* Ken Burns effect for photo sequence */
+@keyframes kenBurns {
+  0% {
+    transform: scale(1.0) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1.04) translate(1%, 0.5%);
+  }
+}
+
+.animate-ken-burns {
+  animation: kenBurns 16s ease-in-out infinite alternate;
+}
+
+/* Candle flame animations */
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: scale(1) rotate(-1deg);
+    opacity: 0.95;
+  }
+  25% {
+    transform: scale(1.08, 1.15) rotate(2deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.95, 0.9) rotate(-2deg);
+    opacity: 0.85;
+  }
+  75% {
+    transform: scale(1.05, 1.05) rotate(1deg);
+    opacity: 0.98;
+  }
+}
+
+.animate-flame {
+  animation: flameFlicker 0.6s infinite ease-in-out;
+  transform-origin: bottom center;
+}
+
+/* Instagram / Spotify Wrapped style story progress bar */
+@keyframes storyProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.animate-story-progress {
+  animation: storyProgress 5s linear forwards;
+}
+
+/* Comprehensive prefers-reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-ken-burns, .animate-flame, .animate-ping, .animate-bounce, .animate-pulse {
+    animation: none !important;
+  }
+}
