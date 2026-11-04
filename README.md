@@ -8,34 +8,36 @@ Repository: [https://github.com/janmesh16/Pranay-Birthday](https://github.com/ja
 
 ---
 
-## 🌐 Deploying to Render (Web Service)
+## 🌐 Deploying to Render (Static Site)
 
-PRANAYFLIX is configured for production deployment on Render as a **Web Service** (Node.js server) using the included [`render.yaml`](./render.yaml) and high-performance [`server.js`](./server.js) HTTP streaming server.
+PRANAYFLIX is configured for seamless, zero-cost, high-speed deployment on Render as a **Static Site** using the included [`render.yaml`](./render.yaml).
 
-### Step-by-Step Render Web Service Guide
+### Step-by-Step Render Static Site Deployment Guide
 
 #### Step 1: Push Code to GitHub
 Ensure all your latest files are committed and pushed to your repository:
 ```bash
 git add .
-git commit -m "Configure PRANAYFLIX for Render Web Service deployment"
+git commit -m "Configure PRANAYFLIX for Render Static Site deployment"
 git push origin main
 ```
 > **Security Notice**: `.gitignore` strictly protects your `.env` file so your real keys are never committed to GitHub.
 
-#### Step 2: Create Web Service on Render
-1. Go to your [Render Dashboard](https://dashboard.render.com/) and click **New +** > **Web Service**.
+#### Step 2: Create Static Site on Render
+1. Go to your [Render Dashboard](https://dashboard.render.com/) and click **New +** > **Static Site**.
 2. Connect your GitHub repository: `janmesh16/Pranay-Birthday`.
-3. Configure the service settings (or let Render auto-detect from [`render.yaml`](./render.yaml)):
+3. Configure the settings (or let Render auto-detect from [`render.yaml`](./render.yaml)):
    - **Name**: `pranayflix`
-   - **Environment / Runtime**: `Node`
    - **Branch**: `main`
    - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start` (or `node server.js`)
-   - **Instance Type**: `Free`
+   - **Publish Directory**: `dist`
+4. Under **Redirects / Rewrites** (or auto-configured via `render.yaml`):
+   - **Type**: `Rewrite`
+   - **Source**: `/*`
+   - **Destination**: `/index.html`
 
 #### Step 3: Add Environment Variables on Render
-Under the **Environment** tab in your Render Web Service settings, add the following environment variables:
+Under the **Environment** tab in your Render Static Site settings, click **"Add from .env"** (or add individually) and paste the following environment variables:
 
 | Key | Example / Description |
 | :--- | :--- |
@@ -47,8 +49,8 @@ Under the **Environment** tab in your Render Web Service settings, add the follo
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | `741073625710` |
 | `VITE_FIREBASE_APP_ID` | `1:741073625710:web:516f2cdc567945ad3ebc7f` |
 
-#### Step 4: Click Create Web Service!
-Render will build the Vite bundle, start the Node.js server on `$PORT`, and provide your live HTTPS URL (e.g. `https://pranayflix.onrender.com`).
+#### Step 4: Click Create Static Site!
+Render will run `npm install && npm run build`, serve the static `dist/` directory across their global CDN, and give you a fast, secure HTTPS URL (e.g. `https://pranayflix.onrender.com`).
 
 ---
 
