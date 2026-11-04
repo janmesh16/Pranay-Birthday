@@ -341,8 +341,8 @@ export function Homepage({
             className="flex items-center gap-1.5 pl-1.5 group"
             title="Switch Profile"
           >
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-800 border border-white/20 flex items-center justify-center text-white text-xs font-bold shadow-md group-hover:scale-105 transition-transform">
-              P
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden border border-white/20 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform bg-gradient-to-tr from-red-600 to-red-800">
+              <img src="/photos/pranay/bike-hero.jpg" alt="P" className="w-full h-full object-cover" />
             </div>
           </button>
         </div>
@@ -740,7 +740,13 @@ export function Homepage({
           {/* Pranay Main Lead */}
           <div className="snap-start-card flex-shrink-0 w-36 sm:w-44 text-center">
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto mb-2 border-2 border-pranay-red shadow-glow-red bg-[#161622] flex items-center justify-center">
-              <User className="w-12 h-12 text-pranay-red" />
+              <ImageWithFallback
+                src="/photos/pranay/bike-hero.jpg"
+                alt={CONFIG.birthdayName}
+                fallbackTitle={CONFIG.birthdayName}
+                aspectRatio="aspect-square"
+                className="w-full h-full object-cover"
+              />
             </div>
             <h4 className="text-xs sm:text-sm font-bold text-white">{CONFIG.birthdayName}</h4>
             <p className="text-[10px] text-pranay-red font-semibold uppercase tracking-wide">The Main Character</p>

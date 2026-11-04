@@ -44,15 +44,15 @@ export const CONFIG = {
     { season: 7, year: 2013, title: "The Awkward Haircut Era", caption: "A haircut only a mother could love. Photographic evidence classified.", photo: "/photos/seasons/07.jpg" },
     { season: 8, year: 2014, title: "World Cup & Gali Cricket", caption: "Argued over LBW decisions for 45 minutes every evening.", photo: "/photos/seasons/08.jpg" },
     { season: 9, year: 2015, title: "The Preadolescent Sass", caption: "Developing comebacks that didn't make sense, but delivered with confidence.", photo: "/photos/seasons/09.jpg" },
-    { season: 10, year: 2016, title: "Double Digits: Big Boy Hours", caption: "Turned 10. Officially believed he was ready to drive a car.", photo: "/photos/seasons/10.jpg" },
+    { season: 10, year: 2016, title: "Tradition & Modaks: Festive Roots", caption: "White kurta, traditional veshti, and Lord Ganesha's blessings at home. The sweet era before teenage drama started.", photo: "/photos/seasons/10.jpg", hasRealPhoto: true },
     { season: 11, year: 2017, title: "Puberty Strikes Back", caption: "Voice cracked mid-sentence; blamed the weather.", photo: "/photos/seasons/11.jpg" },
     { season: 12, year: 2018, title: "Middle School Drama", caption: "Crushes, secret notes, and pretending to understand algebra.", photo: "/photos/seasons/12.jpg" },
     { season: 13, year: 2019, title: "Studying (Paused Indefinitely)", caption: "The last recorded sighting of Pranay opening a textbook voluntarily.", photo: "/photos/seasons/13.jpg" },
-    { season: 14, year: 2020, title: "Lockdown & 14-Hour Screen Time", caption: "Zoom camera permanently turned off. Mastered online gaming.", photo: "/photos/seasons/14.jpg" },
-    { season: 15, year: 2021, title: "The Glow Up Experiment", caption: "Bought fancy sneakers, tried 14 different hairstyles.", photo: "/photos/seasons/15.jpg" },
-    { season: 16, year: 2022, title: "10th Board Exam Panic", caption: "100 hours of stress, 3 hours of actual revision, pure survival.", photo: "/photos/seasons/16.jpg" },
-    { season: 17, year: 2023, title: "Sweet Sixteen + 1", caption: "Roaming around city corners pretending to be the main character.", photo: "/photos/seasons/17.jpg" },
-    { season: 18, year: 2024, title: "The Triad: Bro Code & Chaos", caption: "Janmesh, Pranay & the squad. Black shirt, waffle knit, and white tee. Navigating life, exams, and brotherhood.", photo: "/photos/seasons/18.jpg", hasRealPhoto: true },
+    { season: 14, year: 2020, title: "Bappa's Shield: Kaal Bhairav Pandal", caption: "Standing proud beside the mighty Kaal Bhairav Ganesha idol at night. Divine vibes and powerful energy.", photo: "/photos/seasons/14.jpg", hasRealPhoto: true },
+    { season: 15, year: 2021, title: "The Aesthetic Era: Specs & Fade", caption: "Plaid shirt, vintage round glasses, and a fresh taper fade. Caught looking candidly into the distance like a Bollywood philosopher.", photo: "/photos/seasons/15.jpg", hasRealPhoto: true },
+    { season: 16, year: 2022, title: "Night Rider: Leaning on the Bike", caption: "Crisp white shirt, silver chain, and the midnight bike arc. Officially adopting the mysterious main character aura.", photo: "/photos/seasons/16.jpg", hasRealPhoto: true },
+    { season: 17, year: 2023, title: "The Blue Bike Saga: King of the Road", caption: "Mounted on the blue machine with a confident grin. Claiming ownership of every street, late-night tea stall, and city corner.", photo: "/photos/seasons/17.jpg", hasRealPhoto: true },
+    { season: 18, year: 2024, title: "The Triad: Bro Code & Chaos", caption: "Janmesh, Pranay & the squad. Black shirt, waffle knit, and white tee. Standing tall through exams, midnight chai runs, and lifelong bro code.", photo: "/photos/seasons/18.jpg", hasRealPhoto: true },
     { season: 19, year: 2025, title: "The Finale: Elevator Mirror Syndicate", caption: "No elevator in the city was safe from this squad. 4 friends, 100 selfies, and the crew that made the teenage finale legendary.", photo: "/photos/seasons/19.jpg", hasRealPhoto: true }
   ],
 
@@ -260,6 +260,33 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       tag: "Brothers' Vault",
       duration: "Midnight Archives",
       caption: "Black shirt, waffle knit, and white tee. Standing tall through exams, midnight chai runs, and lifelong bro code."
+    },
+    {
+      id: "del_specs",
+      title: "The Intellectual Phase (Philosopher Era)",
+      type: "photo",
+      file: "/photos/pranay/specs-aesthetic.jpg",
+      tag: "Vintage Aesthetic",
+      duration: "9:17 PM Friday",
+      caption: "Round glasses, intense side glance, and thinking about absolutely nothing. Peak teenage aesthetic."
+    },
+    {
+      id: "del_bike",
+      title: "The Midnight Bike Rider (Behind the Scenes)",
+      type: "photo",
+      file: "/photos/pranay/bike-hero.jpg",
+      tag: "Rider Arc",
+      duration: "Midnight Chronicles",
+      caption: "Sitting on the machine like he owns the highway. Real story: he was just waiting for the tea stall to open."
+    },
+    {
+      id: "del_mandap",
+      title: "Sanskaari Pranay: Mandap Special",
+      type: "photo",
+      file: "/photos/pranay/traditional-mandap.jpg",
+      tag: "Festive Vault",
+      duration: "Home Archive",
+      caption: "Full white kurta and veshti with Lord Ganesha. 10/10 sanskaari boy ready to ask for 5 extra modaks."
     },
     {
       id: "del_01",

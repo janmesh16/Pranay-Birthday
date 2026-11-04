@@ -35,8 +35,9 @@ export function ParallaxFloatingPhotos() {
       CONFIG.seasons?.[17]?.photo, // Boys Triad (2024)
       CONFIG.special?.photo || "/photos/janmesh/02.jpg", // Suited up Janmesh & Pranay
       "/photos/janmesh/01.jpg", // Festive Janmesh & Pranay with Bappa
-      "/photos/squad/elevator-squad-heart.jpg", // Elevator squad candid
-      CONFIG.heroPhoto
+      "/photos/pranay/bike-hero.jpg", // Pranay on blue bike
+      "/photos/pranay/specs-aesthetic.jpg", // Vintage aesthetic glasses
+      "/photos/pranay/traditional-mandap.jpg" // Traditional Ganpati mandap
     ].filter(Boolean);
 
     // Take max 8 unique items

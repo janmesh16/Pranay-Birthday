@@ -47,6 +47,7 @@ export function WhosWatching({ onSelectProfile }) {
       name: CONFIG.birthdayName,
       badge: 'Birthday Boy',
       color: 'from-red-600 to-red-800',
+      photo: '/photos/pranay/bike-hero.jpg',
       icon: User,
       action: handlePranay,
       glow: 'hover:shadow-glow-red border-pranay-red/40'
@@ -56,6 +57,7 @@ export function WhosWatching({ onSelectProfile }) {
       name: 'Roast Mode',
       badge: 'Unfiltered 🌶️',
       color: 'from-amber-600 to-orange-700',
+      photo: '/photos/pranay/specs-aesthetic.jpg',
       icon: Flame,
       action: handleRoastMode,
       glow: 'hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] border-amber-500/40'
@@ -65,6 +67,7 @@ export function WhosWatching({ onSelectProfile }) {
       name: 'Mom / Family',
       badge: 'Special Love',
       color: 'from-pink-600 to-rose-800',
+      photo: '/photos/pranay/baby-season1.jpg',
       icon: Heart,
       action: handleFamily,
       glow: 'hover:shadow-[0_0_25px_rgba(244,63,94,0.5)] border-pink-500/40'
@@ -74,6 +77,7 @@ export function WhosWatching({ onSelectProfile }) {
       name: 'Guest',
       badge: 'Unregistered',
       color: 'from-gray-700 to-gray-900',
+      photo: null,
       icon: Users,
       action: handleGuest,
       glow: 'hover:border-gray-500 border-white/10'
@@ -119,9 +123,22 @@ export function WhosWatching({ onSelectProfile }) {
             >
               {/* Profile Box */}
               <div className={`relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-gradient-to-br ${p.color} border-2 ${p.glow} flex flex-col items-center justify-center p-3 transition-all duration-300 transform group-hover:scale-105 active:scale-95 shadow-xl overflow-hidden`}>
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
-                <Icon className="w-12 h-12 sm:w-16 sm:h-16 text-white drop-shadow-md z-10" />
-                <span className="absolute bottom-2 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/60 backdrop-blur-sm text-gray-200 z-10">
+                {p.photo ? (
+                  <>
+                    <img 
+                      src={p.photo} 
+                      alt={p.name} 
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+                    <Icon className="w-12 h-12 sm:w-16 sm:h-16 text-white drop-shadow-md z-10" />
+                  </>
+                )}
+                <span className="absolute bottom-2 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/75 backdrop-blur-sm text-gray-200 z-10 border border-white/10">
                   {p.badge}
                 </span>
               </div>
