@@ -16,13 +16,13 @@ export function IntroSting({ onComplete }) {
       {/* Cinematic Red Flare Streaks in the background */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
-        animate={{ opacity: [0, 0.8, 1, 0.4, 0], scaleX: [0.1, 1.5, 2.5, 3] }}
+        animate={{ opacity: [0, 0.8, 1, 0.4, 0], scaleX: [0.1, 1.2, 2.0, 2.6, 3.0] }}
         transition={{ duration: 2.8, ease: "easeOut" }}
         className="absolute w-full h-1 bg-gradient-to-r from-transparent via-pranay-red to-transparent blur-sm"
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: [0, 0.6, 0.9, 0], scale: [0.5, 1.2, 1.8] }}
+        animate={{ opacity: [0, 0.6, 0.9, 0], scale: [0.5, 0.9, 1.4, 1.8] }}
         transition={{ duration: 2.8, ease: "easeOut" }}
         className="absolute w-96 h-96 rounded-full bg-pranay-red/30 blur-3xl pointer-events-none"
       />

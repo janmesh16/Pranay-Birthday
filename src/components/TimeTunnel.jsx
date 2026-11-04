@@ -228,52 +228,60 @@ export function TimeTunnel({ onSelectSeason }) {
  * Individual Season Card positioned in 3D Depth
  */
 function TimeTunnelCard({ season, index, total, scrollYProgress, isLowEnd, onSelectSeason }) {
-  // Compute normalized target point along scroll timeline [0, 1]
-  const targetP = index / (total - 1);
-  const step = 1 / (total - 1);
+  // Normalize safe step and center point
+  const step = 1 / Math.max(1, total - 1);
+  const centerP = index * step;
 
-  // Scroll milestones for this specific card
-  const enterP = Math.max(0, targetP - step * 1.6);
-  const centerP = targetP;
-  const exitP = Math.min(1, targetP + step * 1.4);
+  // Compute strictly monotonic milestones:
+  // For index 0: card starts at center (0) and exits by step * 1.5
+  // For last index: card enters from 1 - step * 1.5 and reaches center at 1
+  // For other cards: enters at center - step * 1.5, peaks at center, exits at center + step * 1.5
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
 
-  // Transform depth (translateZ): from deep background (-1000px) -> center (0px) -> exit toward camera (+400px)
-  const z = useTransform(
-    scrollYProgress,
-    [enterP, centerP, exitP],
-    isLowEnd ? [0, 0, 0] : [-1000, 0, 420]
-  );
+  let milestones;
+  let zValues;
+  let scaleValues;
+  let opacityValues;
+  let rotValues;
+  let xValues;
 
-  // Scale: small in distance (0.4) -> full size (1.0) -> expands as it passes (1.3)
-  const scale = useTransform(
-    scrollYProgress,
-    [enterP, centerP, exitP],
-    [0.45, 1.0, 1.3]
-  );
-
-  // Opacity: fades in as it approaches -> solid 1 at center -> fades out as it drifts past
-  const opacity = useTransform(
-    scrollYProgress,
-    [enterP, enterP + step * 0.7, centerP, exitP - step * 0.4, exitP],
-    [0, 0.45, 1, 0.8, 0]
-  );
-
-  // Subtle left / right alternation & rotation to feel like navigating a memory corridor
   const isOdd = index % 2 !== 0;
   const xOffset = isOdd ? -24 : 24;
   const rotZ = isOdd ? -3 : 3;
 
-  const rotateZ = useTransform(
-    scrollYProgress,
-    [enterP, centerP, exitP],
-    [rotZ * 1.5, rotZ, rotZ * 2]
-  );
+  if (isFirst) {
+    const exitP = Math.min(1, step * 1.5);
+    milestones = [0, exitP];
+    zValues = isLowEnd ? [0, 0] : [0, 420];
+    scaleValues = [1.0, 1.3];
+    opacityValues = [1, 0];
+    rotValues = [rotZ, rotZ * 2];
+    xValues = [xOffset, xOffset * 3];
+  } else if (isLast) {
+    const enterP = Math.max(0, 1 - step * 1.5);
+    milestones = [enterP, 1];
+    zValues = isLowEnd ? [0, 0] : [-1000, 0];
+    scaleValues = [0.45, 1.0];
+    opacityValues = [0, 1];
+    rotValues = [rotZ * 1.5, rotZ];
+    xValues = [xOffset * 1.8, xOffset];
+  } else {
+    const enterP = Math.max(0, centerP - step * 1.5);
+    const exitP = Math.min(1, centerP + step * 1.5);
+    milestones = [enterP, centerP, exitP];
+    zValues = isLowEnd ? [0, 0, 0] : [-1000, 0, 420];
+    scaleValues = [0.45, 1.0, 1.3];
+    opacityValues = [0, 1, 0];
+    rotValues = [rotZ * 1.5, rotZ, rotZ * 2];
+    xValues = [xOffset * 1.8, xOffset, xOffset * 3];
+  }
 
-  const x = useTransform(
-    scrollYProgress,
-    [enterP, centerP, exitP],
-    [xOffset * 1.8, xOffset, xOffset * 3]
-  );
+  const z = useTransform(scrollYProgress, milestones, zValues);
+  const scale = useTransform(scrollYProgress, milestones, scaleValues);
+  const opacity = useTransform(scrollYProgress, milestones, opacityValues);
+  const rotateZ = useTransform(scrollYProgress, milestones, rotValues);
+  const x = useTransform(scrollYProgress, milestones, xValues);
 
   return (
     <motion.div
