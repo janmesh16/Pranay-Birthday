@@ -41,13 +41,13 @@ export const CONFIG = {
     { season: 4, year: 2010, title: "Kindergarten Chronicles", caption: "Trading crayon secrets and pretending nap time was torture.", photo: "/photos/seasons/04.jpg" },
     { season: 5, year: 2011, title: "Primary School Hustle", caption: "Heavy schoolbag, five notebooks, zero homework done.", photo: "/photos/seasons/05.jpg" },
     { season: 6, year: 2012, title: "The Apocalyptic Imagination", caption: "Thought the world was ending in 2012. Survived just to eat Maggi.", photo: "/photos/seasons/06.jpg" },
-    { season: 7, year: 2013, title: "The Awkward Haircut Era", caption: "A haircut only a mother could love. Photographic evidence classified.", photo: "/photos/seasons/07.jpg" },
-    { season: 8, year: 2014, title: "World Cup & Gali Cricket", caption: "Argued over LBW decisions for 45 minutes every evening.", photo: "/photos/seasons/08.jpg" },
+    { season: 7, year: 2013, title: "The Old Soul: B&W Chikankari", caption: "Monochrome elegance, long embroidered kurta, and gazing thoughtfully in the mirror like a classical poet.", photo: "/photos/seasons/07.jpg", hasRealPhoto: true },
+    { season: 8, year: 2014, title: "Nature & Peace: The Petting Arc", caption: "Sun-drenched rural fields, wide open skies, and gently petting a white calf. Pure peace and pastoral serenity.", photo: "/photos/seasons/08.jpg", hasRealPhoto: true },
     { season: 9, year: 2015, title: "The Preadolescent Sass", caption: "Developing comebacks that didn't make sense, but delivered with confidence.", photo: "/photos/seasons/09.jpg" },
     { season: 10, year: 2016, title: "Tradition & Modaks: Festive Roots", caption: "White kurta, traditional veshti, and Lord Ganesha's blessings at home. The sweet era before teenage drama started.", photo: "/photos/seasons/10.jpg", hasRealPhoto: true },
-    { season: 11, year: 2017, title: "Puberty Strikes Back", caption: "Voice cracked mid-sentence; blamed the weather.", photo: "/photos/seasons/11.jpg" },
-    { season: 12, year: 2018, title: "Middle School Drama", caption: "Crushes, secret notes, and pretending to understand algebra.", photo: "/photos/seasons/12.jpg" },
-    { season: 13, year: 2019, title: "Studying (Paused Indefinitely)", caption: "The last recorded sighting of Pranay opening a textbook voluntarily.", photo: "/photos/seasons/13.jpg" },
+    { season: 11, year: 2017, title: "The Iron Temple: Gym Arc Begins", caption: "Mirror selfie in the weights room. Zero excuses, high protein dreams, and building the physique for Season 20.", photo: "/photos/seasons/11.jpg", hasRealPhoto: true },
+    { season: 12, year: 2018, title: "Campus Routine: Mint Green Era", caption: "Mint green sweatshirt, backpack on one shoulder, and elevator mirror selfies on the way to class.", photo: "/photos/seasons/12.jpg", hasRealPhoto: true },
+    { season: 13, year: 2019, title: "Monochrome Mood: Late Night Elevators", caption: "Black and white aesthetics, watch on wrist, and cinematic reflections during late-night elevator rides.", photo: "/photos/seasons/13.jpg", hasRealPhoto: true },
     { season: 14, year: 2020, title: "Bappa's Shield: Kaal Bhairav Pandal", caption: "Standing proud beside the mighty Kaal Bhairav Ganesha idol at night. Divine vibes and powerful energy.", photo: "/photos/seasons/14.jpg", hasRealPhoto: true },
     { season: 15, year: 2021, title: "The Aesthetic Era: Specs & Fade", caption: "Plaid shirt, vintage round glasses, and a fresh taper fade. Caught looking candidly into the distance like a Bollywood philosopher.", photo: "/photos/seasons/15.jpg", hasRealPhoto: true },
     { season: 16, year: 2022, title: "Night Rider: Leaning on the Bike", caption: "Crisp white shirt, silver chain, and the midnight bike arc. Officially adopting the mysterious main character aura.", photo: "/photos/seasons/16.jpg", hasRealPhoto: true },
@@ -72,10 +72,10 @@ export const CONFIG = {
 
   // Continue Watching
   continueWatching: [
-    { title: "Adulting: The Struggle", progress: 3, season: "S20:E1", duration: "48m remaining" },
-    { title: "Studying (paused since 2019)", progress: 12, season: "S13:E4", duration: "Paused" },
-    { title: "Hitting the Gym", progress: 7, season: "S19:E2", duration: "Day 2 / 365" },
-    { title: "Replying to Texts Promptly", progress: 1, season: "S1:E1", duration: "Failed to load" }
+    { title: "Adulting: The Struggle", progress: 3, season: "S20:E1", duration: "48m remaining", photo: "/photos/pranay/bike-hero.jpg" },
+    { title: "Hitting the Gym (Gains Arc)", progress: 78, season: "S11:E4", duration: "Bulking Phase", photo: "/photos/pranay/gym-physique.jpg" },
+    { title: "Village Peace & Cow Petting", progress: 42, season: "S8:E3", duration: "24m remaining", photo: "/photos/pranay/nature-calf.jpg" },
+    { title: "Replying to Texts Promptly", progress: 1, season: "S1:E1", duration: "Failed to load", photo: "/photos/pranay/specs-aesthetic.jpg" }
   ],
 
   // Coming Soon
@@ -287,6 +287,33 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       tag: "Festive Vault",
       duration: "Home Archive",
       caption: "Full white kurta and veshti with Lord Ganesha. 10/10 sanskaari boy ready to ask for 5 extra modaks."
+    },
+    {
+      id: "del_gym",
+      title: "The Iron Temple: Uncensored Gains",
+      type: "photo",
+      file: "/photos/pranay/gym-physique.jpg",
+      tag: "Fitness Vault",
+      duration: "Peak Bulk",
+      caption: "Mirror selfie after hitting arms and chest. High protein, heavy lifting, and manifesting the Greek god physique for Season 20."
+    },
+    {
+      id: "del_nature",
+      title: "Pastoral Serenity: Cow Petting Arc",
+      type: "photo",
+      file: "/photos/pranay/nature-calf.jpg",
+      tag: "Peace Vault",
+      duration: "Golden Hour",
+      caption: "Out in the fields under clear blue skies, showing his soft side by gently petting a baby calf. Total inner calm and village therapy."
+    },
+    {
+      id: "del_kurta",
+      title: "Classical Poet: Chikankari Mirror Reflection",
+      type: "photo",
+      file: "/photos/pranay/bw-kurta.jpg",
+      tag: "Vintage Monochrome",
+      duration: "Poet Cut",
+      caption: "Black and white portrait in a detailed chikankari embroidered kurta. Giving royal lineage and soulful shayari energy."
     },
     {
       id: "del_01",

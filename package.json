@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "npm install",
-    "build": "vite build",
+    "build": "npm install && vite build",
     "preview": "vite preview",
     "start": "node server.js",
     "deploy:rules": "npx -y firebase-tools@latest deploy --only firestore:rules"

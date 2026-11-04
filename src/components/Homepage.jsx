@@ -605,11 +605,20 @@ export function Homepage({
               onClick={() => onTriggerToast(`Resuming "${cw.title}"... buffer error: laziness detected`)}
               className="snap-start-card flex-shrink-0 w-52 sm:w-60 bg-[#14141e] rounded-xl overflow-hidden border border-white/10 hover:border-white/25 cursor-pointer transition-all shadow-md group"
             >
-              <div className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-950 flex items-center justify-center p-3 text-center">
-                <div className="w-10 h-10 rounded-full bg-white/10 group-hover:bg-pranay-red text-white flex items-center justify-center transition-colors">
+              <div className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-950 flex items-center justify-center p-3 text-center overflow-hidden">
+                {cw.photo && (
+                  <img
+                    src={cw.photo}
+                    alt={cw.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                )}
+                <div className="absolute inset-0 bg-black/45 group-hover:bg-black/25 transition-colors" />
+                <div className="relative z-10 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm group-hover:bg-pranay-red text-white flex items-center justify-center transition-colors shadow-lg">
                   <Play className="w-4 h-4 fill-current ml-0.5" />
                 </div>
-                <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/60 text-[9px] text-gray-300 font-mono">
+                <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-sm text-[9px] text-gray-200 font-mono z-10 border border-white/10">
                   {cw.season}
                 </span>
               </div>
