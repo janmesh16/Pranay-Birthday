@@ -19,6 +19,9 @@ import { DeletedSceneModal } from './DeletedSceneModal';
 import { TimeCapsuleModal } from './TimeCapsuleModal';
 import { YearInReviewModal } from './YearInReviewModal';
 import { DirectorsCutModal } from './DirectorsCutModal';
+import { LivingBackgroundVideo } from './LivingBackgroundVideo';
+import { TimeTunnel } from './TimeTunnel';
+import { ParallaxFloatingPhotos } from './ParallaxFloatingPhotos';
 import { playClickSound, playUnlockSound } from '../utils/audio';
 import { unlockAchievement } from '../utils/achievements';
 
@@ -46,6 +49,19 @@ export function Homepage({
   const [showTimeCapsule, setShowTimeCapsule] = useState(false);
   const [showYearInReview, setShowYearInReview] = useState(false);
   const [showDirectorsCut, setShowDirectorsCut] = useState(false);
+
+  // Check if any modal is active (to pause ambient background video)
+  const isAnyModalOpen = Boolean(
+    activeSeason || 
+    activeFriend || 
+    activeDeletedScene || 
+    showTimeCapsule || 
+    showYearInReview || 
+    showDirectorsCut || 
+    showSearch || 
+    showEasterEgg || 
+    showReport
+  );
 
   // Unlocked friends list from localStorage
   const [unlockedFriends, setUnlockedFriends] = useState(() => {
@@ -172,7 +188,13 @@ export function Homepage({
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0f] text-white overflow-x-hidden pb-16 selection:bg-[#E50914] selection:text-white">
+    <div className="relative min-h-screen bg-[#0b0b0f] text-white overflow-x-hidden pb-16 selection:bg-[#E50914] selection:text-white">
+      {/* Living Ambient Background Video (Fixed 100dvh background with dark gradient & vignette) */}
+      <LivingBackgroundVideo isPaused={isAnyModalOpen} />
+
+      {/* Floating Parallax Photo Layers (Depth ambiance behind rows) */}
+      <ParallaxFloatingPhotos />
+
       {/* 1. TOP NAVBAR */}
       <header className="fixed top-0 inset-x-0 z-40 bg-gradient-to-b from-black/95 via-black/80 to-transparent backdrop-blur-sm px-4 sm:px-8 py-3.5 flex items-center justify-between border-b border-white/5">
         <div className="flex items-center gap-4 sm:gap-6">
@@ -407,67 +429,8 @@ export function Homepage({
         </div>
       </section>
 
-      {/* 3. ROW 1: PREVIOUSLY ON PRANAY (SEASONS 1 TO 19) */}
-      <section className="mt-8 px-4 sm:px-8">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-display uppercase tracking-wider text-white">
-              Previously on Pranay (Seasons 1 to 19)
-            </h2>
-            <span className="text-xs text-gray-500 font-mono">({CONFIG.seasons.length} years)</span>
-          </div>
-          <span className="text-xs text-pranay-red uppercase tracking-wider font-semibold hidden sm:inline">
-            Tap to recap
-          </span>
-        </div>
-
-        {/* Horizontal Snap Scroll Row */}
-        <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar snap-x-mandatory pb-4 pt-1">
-          {CONFIG.seasons.map((s) => (
-            <div
-              key={s.season}
-              onClick={() => setActiveSeason(s)}
-              className="snap-start-card flex-shrink-0 w-44 sm:w-56 group cursor-pointer"
-            >
-              {/* Card Thumbnail */}
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group-hover:border-pranay-red transition-all duration-300 transform group-hover:scale-105 shadow-lg bg-[#14141e]">
-                <ImageWithFallback
-                  src={s.photo}
-                  alt={s.title}
-                  fallbackTitle={`S${s.season} (${s.year})`}
-                  aspectRatio="aspect-video"
-                  className="w-full h-full"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-                
-                {/* Season Badge */}
-                <div className="absolute top-2 left-2">
-                  <span className="px-2 py-0.5 rounded bg-pranay-red text-[10px] font-bold uppercase font-display text-white">
-                    S{s.season}
-                  </span>
-                </div>
-
-                <div className="absolute bottom-2 left-2.5 right-2.5">
-                  <span className="text-[10px] text-gray-300 flex items-center gap-1 font-mono">
-                    <Calendar className="w-3 h-3 text-pranay-red" />
-                    {s.year}
-                  </span>
-                </div>
-              </div>
-
-              {/* Title & Caption */}
-              <div className="mt-2 px-1">
-                <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-pranay-red transition-colors line-clamp-1">
-                  {s.title}
-                </h3>
-                <p className="text-[11px] text-gray-400 line-clamp-2 mt-0.5 leading-snug">
-                  {s.caption}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* 3. ROW 1: PREVIOUSLY ON PRANAY (3D DEPTH TIME TUNNEL) */}
+      <TimeTunnel onSelectSeason={(s) => setActiveSeason(s)} />
 
       {/* 4. ROW 2: FRIENDS' EPISODES (LOCKED BEHIND SECRET CODES) */}
       <section className="mt-10 px-4 sm:px-8">

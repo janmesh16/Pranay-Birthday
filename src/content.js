@@ -17,6 +17,8 @@ export const CONFIG = {
   heroPhoto: "/photos/hero.jpg",
   mainVideo: "/video/journey.mp4",
   videoPoster: "/photos/video-poster.jpg",
+  backgroundVideo: "/video/video-bg.mp4",
+  backgroundPoster: "/photos/video-poster.jpg",
   introSound: "/audio/intro.mp3",
 
   // Review wall settings: hold until premiere unlock (default true)
