@@ -1,348 +1,421 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { Calendar, ChevronRight, Eye, Sparkles, SlidersHorizontal, List } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Calendar, 
+  ChevronRight, 
+  ChevronLeft, 
+  Eye, 
+  Sparkles, 
+  LayoutGrid, 
+  SlidersHorizontal,
+  Camera,
+  Layers
+} from 'lucide-react';
 import { CONFIG } from '../content';
 import { ImageWithFallback } from '../utils/mediaFallback';
-import { playClickSound } from '../utils/audio';
+import { playClickSound, playCardFlipSound } from '../utils/audio';
+
+const ERAS = [
+  { id: 'all', label: 'All 19 Seasons', start: 0, end: 18 },
+  { id: 'baby', label: '🍼 Baby & Wonder (S1-S5)', start: 0, end: 4 },
+  { id: 'school', label: '🎒 School Days (S6-S12)', start: 5, end: 11 },
+  { id: 'teen', label: '⚡ Teenage Chaos (S13-S17)', start: 12, end: 16 },
+  { id: 'adult', label: '👑 Adulthood Eve (S18-S19)', start: 17, end: 18 }
+];
 
 export function TimeTunnel({ onSelectSeason }) {
-  const containerRef = useRef(null);
   const seasons = CONFIG.seasons || [];
   const total = seasons.length;
 
-  const [activeSeasonIdx, setActiveSeasonIdx] = useState(0);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isLowEnd, setIsLowEnd] = useState(false);
-  const [viewMode, setViewMode] = useState('tunnel'); // 'tunnel' | 'classic'
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [selectedEra, setSelectedEra] = useState('all');
+  const [viewMode, setViewMode] = useState('carousel'); // 'carousel' | 'grid'
+  const filmstripRef = useRef(null);
 
-  // Detect accessibility & device capability
+  // Keyboard navigation (Left / Right arrow keys)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    const handleKeyDown = (e) => {
+      if (viewMode !== 'carousel') return;
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewMode, activeIdx, total]);
 
-    try {
-      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      setPrefersReducedMotion(motionQuery.matches);
-      if (motionQuery.matches) setViewMode('classic');
-
-      const handleMotion = (e) => {
-        setPrefersReducedMotion(e.matches);
-        if (e.matches) setViewMode('classic');
-      };
-      motionQuery.addEventListener?.('change', handleMotion);
-      return () => motionQuery.removeEventListener?.('change', handleMotion);
-    } catch {}
-
-    // Check device specs (hardwareConcurrency <= 4 is typical of entry/mid-range phones)
-    try {
-      const cores = navigator.hardwareConcurrency || 4;
-      const isSlowNet = navigator.connection && (
-        navigator.connection.saveData || 
-        navigator.connection.effectiveType === '2g' || 
-        navigator.connection.effectiveType === '3g'
-      );
-      if (cores <= 4 || isSlowNet) {
-        setIsLowEnd(true);
+  // Center active thumbnail in bottom filmstrip
+  useEffect(() => {
+    if (filmstripRef.current) {
+      const activeBtn = filmstripRef.current.children[activeIdx];
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
-    } catch {}
-  }, []);
-
-  // Track scroll progress along the tunnel container
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  // Keep track of the active center season index for side indicator & windowing
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const rawIdx = Math.round(latest * (total - 1));
-    const clamped = Math.max(0, Math.min(total - 1, rawIdx));
-    if (clamped !== activeSeasonIdx) {
-      setActiveSeasonIdx(clamped);
     }
-  });
+  }, [activeIdx]);
 
-  // If user prefers reduced motion or explicitly toggles classic mode:
-  if (viewMode === 'classic') {
-    return (
-      <section className="mt-8 px-4 sm:px-8">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-display uppercase tracking-wider text-white">
-              Previously on Pranay (Seasons 1 to 19)
-            </h2>
-            <span className="text-xs text-gray-500 font-mono">({total} years)</span>
+  const handleNext = () => {
+    playCardFlipSound();
+    setActiveIdx((prev) => (prev + 1) % total);
+  };
+
+  const handlePrev = () => {
+    playCardFlipSound();
+    setActiveIdx((prev) => (prev - 1 + total) % total);
+  };
+
+  const handleSelectEra = (era) => {
+    playClickSound();
+    setSelectedEra(era.id);
+    setActiveIdx(era.start);
+  };
+
+  const activeSeason = seasons[activeIdx] || seasons[0];
+
+  return (
+    <section className="relative mt-8 px-4 sm:px-8 py-4 overflow-hidden">
+      {/* 1. Header Toolbar with Title, Era Pills & View Toggle */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5 max-w-7xl mx-auto">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-pranay-red/20 border border-pranay-red/40 text-pranay-red text-[10px] font-bold uppercase tracking-widest font-display flex items-center gap-1">
+              <Sparkles className="w-3 h-3 fill-current" />
+              <span>Memories Spotlight</span>
+            </span>
+            <span className="text-xs text-gray-400 font-mono">
+              (19 Years of Blockbuster Chaos • 2007 → 2025)
+            </span>
           </div>
-
-          <button
-            onClick={() => { playClickSound(); setViewMode('tunnel'); }}
-            className="text-xs text-pranay-red hover:text-white font-bold uppercase tracking-wider flex items-center gap-1 font-display"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Switch to 3D Tunnel</span>
-          </button>
+          <h2 className="text-xl sm:text-3xl font-display uppercase tracking-wider text-white">
+            Previously on Pranay: The Complete 19-Season Saga
+          </h2>
         </div>
 
-        {/* Classic horizontal snap row */}
-        <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar snap-x-mandatory pb-4 pt-1">
+        {/* View Toggle (3D Carousel vs All Seasons Grid) */}
+        <div className="flex items-center gap-2 self-start md:self-auto">
+          <div className="flex items-center gap-1 bg-white/[0.06] p-1 rounded-xl border border-white/10 backdrop-blur-md">
+            <button
+              onClick={() => { playClickSound(); setViewMode('carousel'); }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                viewMode === 'carousel'
+                  ? 'bg-pranay-red text-white shadow-glow-red'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Panoramic Stage</span>
+            </button>
+            <button
+              onClick={() => { playClickSound(); setViewMode('grid'); }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-pranay-red text-white shadow-glow-red'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>19 Seasons Grid</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Era Quick Jump Filter Pills */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 max-w-7xl mx-auto">
+        {ERAS.map((era) => {
+          const isSelected = selectedEra === era.id;
+          return (
+            <button
+              key={era.id}
+              onClick={() => handleSelectEra(era)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+                isSelected
+                  ? 'bg-white/20 border-white/40 text-white shadow-sm'
+                  : 'bg-white/[0.04] border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.08]'
+              }`}
+            >
+              {era.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ========================================================= */}
+      {/* VIEW A: PANORAMIC 3D SPOTLIGHT STAGE (NO EMPTY SPACE)    */}
+      {/* ========================================================= */}
+      {viewMode === 'carousel' && (
+        <div className="relative w-full max-w-7xl mx-auto rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-[#13131e] via-[#0d0d16] to-[#08080e] shadow-2xl p-4 sm:p-8">
+          
+          {/* Dynamic Living Ambient Backdrop behind cards (fills empty space with vibrant photo blur) */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25">
+            <img 
+              src={activeSeason.photo} 
+              alt="" 
+              className="w-full h-full object-cover filter blur-3xl scale-125 transition-all duration-700" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08080e] via-[#0d0d16]/70 to-[#13131e]/80" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_rgba(0,0,0,0.85)_100%)]" />
+          </div>
+
+          {/* 3D Multi-Card Panorama Stage */}
+          <div className="relative z-10 w-full min-h-[380px] sm:min-h-[460px] flex items-center justify-center my-2 overflow-hidden">
+            
+            {/* Left Nav Button */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 sm:left-4 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/70 hover:bg-black/95 border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl backdrop-blur-md"
+              title="Previous Season (Left Arrow)"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* Right Nav Button */}
+            <button
+              onClick={handleNext}
+              className="absolute right-2 sm:right-4 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/70 hover:bg-black/95 border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl backdrop-blur-md"
+              title="Next Season (Right Arrow)"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Cards Array Display with Perspective Offsets */}
+            <div 
+              className="relative w-full h-full flex items-center justify-center"
+              style={{ perspective: '1200px' }}
+            >
+              {[-2, -1, 0, 1, 2].map((offset) => {
+                const targetIdx = (activeIdx + offset + total) % total;
+                const season = seasons[targetIdx];
+                const isCenter = offset === 0;
+
+                // Position styling based on offset from active center
+                let xTranslate = 0;
+                let scale = 1;
+                let rotateY = 0;
+                let zIndex = 20;
+                let opacity = 1;
+
+                if (offset === -2) {
+                  xTranslate = -520;
+                  scale = 0.68;
+                  rotateY = 32;
+                  zIndex = 10;
+                  opacity = 0.35;
+                } else if (offset === -1) {
+                  xTranslate = -280;
+                  scale = 0.84;
+                  rotateY = 20;
+                  zIndex = 15;
+                  opacity = 0.75;
+                } else if (offset === 0) {
+                  xTranslate = 0;
+                  scale = 1.0;
+                  rotateY = 0;
+                  zIndex = 25;
+                  opacity = 1;
+                } else if (offset === 1) {
+                  xTranslate = 280;
+                  scale = 0.84;
+                  rotateY = -20;
+                  zIndex = 15;
+                  opacity = 0.75;
+                } else if (offset === 2) {
+                  xTranslate = 520;
+                  scale = 0.68;
+                  rotateY = -32;
+                  zIndex = 10;
+                  opacity = 0.35;
+                }
+
+                // Hide outer cards on smaller mobile viewports to prevent overflow
+                const isFar = Math.abs(offset) === 2;
+
+                return (
+                  <motion.div
+                    key={season.season}
+                    onClick={() => {
+                      if (isCenter) {
+                        playClickSound();
+                        onSelectSeason(season);
+                      } else {
+                        playCardFlipSound();
+                        setActiveIdx(targetIdx);
+                      }
+                    }}
+                    animate={{
+                      x: xTranslate,
+                      scale: scale,
+                      rotateY: rotateY,
+                      opacity: opacity
+                    }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                    style={{ zIndex }}
+                    className={`absolute w-[86vw] max-w-[340px] sm:max-w-[440px] md:max-w-[500px] aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer border-2 transition-colors duration-300 ${
+                      isCenter 
+                        ? 'border-pranay-red shadow-[0_20px_60px_rgba(229,9,20,0.45)]' 
+                        : 'border-white/15 hover:border-white/40 shadow-2xl'
+                    } ${isFar ? 'hidden md:block' : ''}`}
+                  >
+                    <ImageWithFallback
+                      src={season.photo}
+                      alt={season.title}
+                      fallbackTitle={`Season ${season.season} (${season.year})`}
+                      aspectRatio="aspect-auto"
+                      className="w-full h-full object-cover"
+                    />
+
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-75 transition-opacity" />
+
+                    {/* Top Badges */}
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-lg bg-pranay-red text-white text-[11px] sm:text-xs font-black uppercase tracking-wider font-display shadow-glow-red">
+                        Season {season.season}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-md bg-black/70 text-gray-200 text-[10px] sm:text-xs font-mono border border-white/10 flex items-center gap-1 backdrop-blur-md">
+                        <Calendar className="w-3.5 h-3.5 text-pranay-red" />
+                        <span>{season.year}</span>
+                      </span>
+                      {season.hasRealPhoto && (
+                        <span className="px-2 py-0.5 rounded-md bg-amber-500/90 text-black text-[9px] font-bold uppercase tracking-wider font-mono flex items-center gap-1 shadow-md">
+                          <Camera className="w-3 h-3 fill-current" />
+                          <span>Real Photo</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Center Card Inspect Prompt */}
+                    {isCenter && (
+                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+                        <span className="px-3 py-1 rounded-full bg-pranay-red text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-glow-red transition-all">
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Tap to Play</span>
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Bottom Caption & Title */}
+                    <div className="absolute bottom-3 inset-x-3 sm:bottom-5 sm:inset-x-5">
+                      <h3 className="text-sm sm:text-xl font-bold text-white line-clamp-1 drop-shadow-md">
+                        {season.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-gray-300 line-clamp-2 mt-1 leading-snug drop-shadow-sm font-sans">
+                        {season.caption}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Filmstrip Timeline Navigation (All 19 Seasons Track) */}
+          <div className="relative z-20 mt-6 pt-4 border-t border-white/10">
+            <div className="flex items-center justify-between mb-2 px-1 text-xs">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-400">
+                Timeline Ribbon • Season {activeIdx + 1} of {total} ({activeSeason.year})
+              </span>
+              <span className="text-[11px] text-amber-300 font-mono hidden sm:inline">
+                ★ Click any season thumbnail to jump
+              </span>
+            </div>
+
+            <div 
+              ref={filmstripRef}
+              className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1"
+            >
+              {seasons.map((s, idx) => {
+                const isActive = idx === activeIdx;
+                return (
+                  <button
+                    key={s.season}
+                    onClick={() => {
+                      playCardFlipSound();
+                      setActiveIdx(idx);
+                    }}
+                    className={`relative flex-shrink-0 w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden border-2 transition-all ${
+                      isActive
+                        ? 'border-pranay-red scale-110 shadow-glow-red z-10'
+                        : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                    }`}
+                    title={`Season ${s.season} (${s.year}): ${s.title}`}
+                  >
+                    <img 
+                      src={s.photo} 
+                      alt="" 
+                      className="w-full h-full object-cover" 
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
+                    
+                    {/* Season Tag */}
+                    <span className="absolute bottom-1 left-1.5 text-[9px] font-mono font-bold text-white bg-black/75 px-1 rounded">
+                      S{s.season}
+                    </span>
+
+                    {/* Real Photo Star Indicator */}
+                    {s.hasRealPhoto && (
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 shadow-glow-gold" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* VIEW B: ALL 19 SEASONS HIGH-DENSITY GRID                 */}
+      {/* ========================================================= */}
+      {viewMode === 'grid' && (
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 pt-2">
           {seasons.map((s) => (
             <div
               key={s.season}
-              onClick={() => onSelectSeason(s)}
-              className="snap-start-card flex-shrink-0 w-44 sm:w-56 group cursor-pointer"
+              onClick={() => {
+                playClickSound();
+                onSelectSeason(s);
+              }}
+              className="group cursor-pointer flex flex-col"
             >
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group-hover:border-pranay-red transition-all duration-300 transform group-hover:scale-105 shadow-lg bg-[#14141e]">
+              <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/10 group-hover:border-pranay-red transition-all duration-300 transform group-hover:scale-105 shadow-xl bg-[#14141e]">
                 <ImageWithFallback
                   src={s.photo}
                   alt={s.title}
                   fallbackTitle={`S${s.season} (${s.year})`}
-                  aspectRatio="aspect-video"
-                  className="w-full h-full"
+                  aspectRatio="aspect-auto"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
-                <div className="absolute top-2 left-2">
-                  <span className="px-2 py-0.5 rounded bg-pranay-red text-[10px] font-bold uppercase font-display text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                
+                {/* Top Badges */}
+                <div className="absolute top-2 left-2 flex items-center gap-1">
+                  <span className="px-1.5 py-0.5 rounded bg-pranay-red text-[9px] font-bold uppercase font-display text-white">
                     S{s.season}
                   </span>
-                </div>
-                <div className="absolute bottom-2 left-2.5 right-2.5">
-                  <span className="text-[10px] text-gray-300 flex items-center gap-1 font-mono">
-                    <Calendar className="w-3 h-3 text-pranay-red" />
+                  <span className="px-1.5 py-0.5 rounded bg-black/60 text-[9px] font-mono text-gray-300">
                     {s.year}
                   </span>
                 </div>
-              </div>
-              <div className="mt-2 px-1">
-                <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-pranay-red transition-colors line-clamp-1">
-                  {s.title}
-                </h3>
-                <p className="text-[11px] text-gray-400 line-clamp-2 mt-0.5 leading-snug">
-                  {s.caption}
-                </p>
+
+                {s.hasRealPhoto && (
+                  <div className="absolute top-2 right-2">
+                    <span className="px-1.5 py-0.5 rounded bg-amber-500 text-black text-[8px] font-black uppercase font-mono">
+                      ★ REAL
+                    </span>
+                  </div>
+                )}
+
+                <div className="absolute bottom-2 left-2 right-2">
+                  <h4 className="text-xs font-bold text-white group-hover:text-pranay-red transition-colors line-clamp-1">
+                    {s.title}
+                  </h4>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </section>
-    );
-  }
-
-  // 3D TIME TUNNEL EXPERIENCE
-  return (
-    <section 
-      ref={containerRef}
-      className="relative w-full"
-      style={{ height: `${total * 55}vh` }} // Generous scrolling runway for all 19 seasons
-    >
-      {/* Sticky Stage Viewport (100dvh for mobile Safari address bar safety) */}
-      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden flex flex-col justify-between py-6 px-4 sm:px-8 select-none">
-        {/* Section Top Header & Mode Toggle */}
-        <div className="relative z-30 pt-16 flex items-center justify-between max-w-4xl mx-auto w-full">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="px-2 py-0.5 rounded-full bg-pranay-red/20 border border-pranay-red/40 text-pranay-red text-[10px] font-bold uppercase tracking-widest font-display flex items-center gap-1">
-                <Sparkles className="w-3 h-3 fill-current" />
-                <span>3D Memory Tunnel</span>
-              </span>
-              <span className="text-[10px] text-gray-400 font-mono hidden sm:inline">
-                Scroll to travel 2007 → 2025
-              </span>
-            </div>
-            <h2 className="text-xl sm:text-3xl font-display uppercase tracking-wider text-white">
-              Previously on Pranay: 19 Years of Chaos
-            </h2>
-          </div>
-
-          <button
-            onClick={() => { playClickSound(); setViewMode('classic'); }}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors border border-white/10 flex-shrink-0"
-            title="Switch to Horizontal Row"
-          >
-            <List className="w-4 h-4 text-pranay-red" />
-            <span className="hidden sm:inline">Classic Row</span>
-          </button>
-        </div>
-
-        {/* 3D Depth Stage with CSS Perspective */}
-        <div 
-          className="relative z-20 flex-1 w-full flex items-center justify-center my-auto"
-          style={{
-            perspective: isLowEnd ? 'none' : '1200px',
-            WebkitPerspective: isLowEnd ? 'none' : '1200px',
-            perspectiveOrigin: 'center center',
-            transformStyle: 'preserve-3d'
-          }}
-        >
-          {seasons.map((season, idx) => {
-            // Windowing optimization: only render cards within +/- 3 of current active index to keep 60fps
-            const distance = Math.abs(idx - activeSeasonIdx);
-            if (distance > 3) return null;
-
-            return (
-              <TimeTunnelCard
-                key={season.season}
-                season={season}
-                index={idx}
-                total={total}
-                scrollYProgress={scrollYProgress}
-                isLowEnd={isLowEnd}
-                onSelectSeason={onSelectSeason}
-              />
-            );
-          })}
-        </div>
-
-        {/* Thin Side Progress Indicator (Season N of 19) */}
-        <div className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex items-center gap-2 pointer-events-none">
-          <div className="flex flex-col items-end">
-            <span className="px-2 py-1 rounded-md bg-black/85 border border-pranay-red/40 text-pranay-red font-mono text-[10px] sm:text-xs font-bold tracking-wider shadow-lg backdrop-blur-md">
-              Season {activeSeasonIdx + 1} of {total}
-            </span>
-            <span className="text-[9px] text-gray-400 font-mono mt-0.5">
-              {seasons[activeSeasonIdx]?.year}
-            </span>
-          </div>
-
-          {/* Vertical progress line */}
-          <div className="w-1.5 h-36 sm:h-48 rounded-full bg-white/15 relative overflow-hidden backdrop-blur-sm">
-            <motion.div
-              className="w-full bg-gradient-to-b from-pranay-red to-amber-500 rounded-full"
-              style={{
-                height: `${((activeSeasonIdx + 1) / total) * 100}%`
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Bottom Interactive Guidance Pill */}
-        <div className="relative z-30 pb-4 text-center">
-          <span className="px-4 py-1.5 rounded-full bg-black/60 border border-white/10 text-[11px] text-gray-300 backdrop-blur-md inline-flex items-center gap-1.5">
-            <span>Scroll vertically to fly through memories • Tap center card to view</span>
-          </span>
-        </div>
-      </div>
+      )}
     </section>
   );
 }
-
-/**
- * Individual Season Card positioned in 3D Depth
- */
-function TimeTunnelCard({ season, index, total, scrollYProgress, isLowEnd, onSelectSeason }) {
-  // Normalize safe step and center point
-  const step = 1 / Math.max(1, total - 1);
-  const centerP = index * step;
-
-  // Compute strictly monotonic milestones:
-  // For index 0: card starts at center (0) and exits by step * 1.5
-  // For last index: card enters from 1 - step * 1.5 and reaches center at 1
-  // For other cards: enters at center - step * 1.5, peaks at center, exits at center + step * 1.5
-  const isFirst = index === 0;
-  const isLast = index === total - 1;
-
-  let milestones;
-  let zValues;
-  let scaleValues;
-  let opacityValues;
-  let rotValues;
-  let xValues;
-
-  const isOdd = index % 2 !== 0;
-  const xOffset = isOdd ? -24 : 24;
-  const rotZ = isOdd ? -3 : 3;
-
-  if (isFirst) {
-    const exitP = Math.min(1, step * 1.5);
-    milestones = [0, exitP];
-    zValues = isLowEnd ? [0, 0] : [0, 420];
-    scaleValues = [1.0, 1.3];
-    opacityValues = [1, 0];
-    rotValues = [rotZ, rotZ * 2];
-    xValues = [xOffset, xOffset * 3];
-  } else if (isLast) {
-    const enterP = Math.max(0, 1 - step * 1.5);
-    milestones = [enterP, 1];
-    zValues = isLowEnd ? [0, 0] : [-1000, 0];
-    scaleValues = [0.45, 1.0];
-    opacityValues = [0, 1];
-    rotValues = [rotZ * 1.5, rotZ];
-    xValues = [xOffset * 1.8, xOffset];
-  } else {
-    const enterP = Math.max(0, centerP - step * 1.5);
-    const exitP = Math.min(1, centerP + step * 1.5);
-    milestones = [enterP, centerP, exitP];
-    zValues = isLowEnd ? [0, 0, 0] : [-1000, 0, 420];
-    scaleValues = [0.45, 1.0, 1.3];
-    opacityValues = [0, 1, 0];
-    rotValues = [rotZ * 1.5, rotZ, rotZ * 2];
-    xValues = [xOffset * 1.8, xOffset, xOffset * 3];
-  }
-
-  const z = useTransform(scrollYProgress, milestones, zValues);
-  const scale = useTransform(scrollYProgress, milestones, scaleValues);
-  const opacity = useTransform(scrollYProgress, milestones, opacityValues);
-  const rotateZ = useTransform(scrollYProgress, milestones, rotValues);
-  const x = useTransform(scrollYProgress, milestones, xValues);
-
-  return (
-    <motion.div
-      onClick={() => {
-        playClickSound();
-        onSelectSeason(season);
-      }}
-      style={{
-        transformStyle: isLowEnd ? 'flat' : 'preserve-3d',
-        z,
-        scale,
-        opacity,
-        rotateZ,
-        x,
-        willChange: 'transform, opacity'
-      }}
-      className="absolute max-w-sm sm:max-w-md w-[85vw] sm:w-[440px] cursor-pointer group"
-    >
-      {/* 3D Card Shell */}
-      <div className="relative aspect-[16/10] rounded-3xl overflow-hidden border-2 border-white/20 group-hover:border-pranay-red bg-gradient-to-b from-[#181824] to-[#0c0c14] shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-colors duration-300">
-        <ImageWithFallback
-          src={season.photo}
-          alt={season.title}
-          fallbackTitle={`Season ${season.season} (${season.year})`}
-          aspectRatio="aspect-auto"
-          className="w-full h-full object-cover"
-        />
-
-        {/* Ambient Dark Gradient & Vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-75 transition-opacity" />
-
-        {/* Top Badges */}
-        <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-pranay-red text-white text-xs font-black uppercase tracking-wider font-display shadow-glow-red">
-            Season {season.season}
-          </span>
-          <span className="px-2 py-0.5 rounded-md bg-black/70 text-gray-200 text-[10px] font-mono border border-white/10 flex items-center gap-1 backdrop-blur-md">
-            <Calendar className="w-3 h-3 text-pranay-red" />
-            {season.year}
-          </span>
-        </div>
-
-        {/* Inspect / Open Cue */}
-        <div className="absolute top-3.5 right-3.5">
-          <span className="px-2 py-1 rounded-full bg-black/60 text-white/90 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-md border border-white/10 group-hover:bg-pranay-red transition-colors">
-            <Eye className="w-3 h-3" />
-            <span className="hidden sm:inline">Inspect</span>
-          </span>
-        </div>
-
-        {/* Bottom Details */}
-        <div className="absolute bottom-4 inset-x-4">
-          <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-pranay-red transition-colors line-clamp-1 drop-shadow-md">
-            {season.title}
-          </h3>
-          <p className="text-xs text-gray-300 line-clamp-2 mt-1 leading-snug drop-shadow-sm font-sans">
-            {season.caption}
-          </p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-

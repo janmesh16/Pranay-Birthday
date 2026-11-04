@@ -30,11 +30,13 @@ export function ParallaxFloatingPhotos() {
   // Gather up to 8 photo layers from CONFIG
   const photoLayers = useMemo(() => {
     const rawPhotos = [
-      CONFIG.heroPhoto,
-      ...(CONFIG.seasons || []).slice(0, 5).map(s => s.photo),
-      CONFIG.special?.photo || (typeof CONFIG.special?.photos?.[0] === 'object' ? CONFIG.special?.photos?.[0]?.url : CONFIG.special?.photos?.[0]),
-      CONFIG.friends?.[0]?.photo,
-      CONFIG.friends?.[1]?.photo
+      CONFIG.seasons?.[0]?.photo, // Baby Pranay (2007)
+      CONFIG.seasons?.[18]?.photo, // Squad Elevator Mirror (2025)
+      CONFIG.seasons?.[17]?.photo, // Boys Triad (2024)
+      CONFIG.special?.photo || "/photos/janmesh/02.jpg", // Suited up Janmesh & Pranay
+      "/photos/janmesh/01.jpg", // Festive Janmesh & Pranay with Bappa
+      "/photos/squad/elevator-squad-heart.jpg", // Elevator squad candid
+      CONFIG.heroPhoto
     ].filter(Boolean);
 
     // Take max 8 unique items

@@ -35,7 +35,7 @@ export const CONFIG = {
 
   // 19 Seasons (One per year of his life: 2007 to 2025)
   seasons: [
-    { season: 1, year: 2007, title: "Pilot: The Grand Arrival", caption: "Crying on cue, sleeping 18 hours a day, zero tax liability.", photo: "/photos/seasons/01.jpg" },
+    { season: 1, year: 2007, title: "Pilot: Baby Pranay & The 1st Cake", caption: "The world premiere of Pranay in 2007. Adorned with the iconic bindi, gazing at his birthday cake in pure wonder. The legend begins.", photo: "/photos/seasons/01.jpg", hasRealPhoto: true },
     { season: 2, year: 2008, title: "Learning to Walk (and Fall)", caption: "Discovered gravity the hard way. First official temper tantrums.", photo: "/photos/seasons/02.jpg" },
     { season: 3, year: 2009, title: "The Terrible Threes", caption: "Mastered the word 'NO' and used it weapon-grade.", photo: "/photos/seasons/03.jpg" },
     { season: 4, year: 2010, title: "Kindergarten Chronicles", caption: "Trading crayon secrets and pretending nap time was torture.", photo: "/photos/seasons/04.jpg" },
@@ -52,8 +52,8 @@ export const CONFIG = {
     { season: 15, year: 2021, title: "The Glow Up Experiment", caption: "Bought fancy sneakers, tried 14 different hairstyles.", photo: "/photos/seasons/15.jpg" },
     { season: 16, year: 2022, title: "10th Board Exam Panic", caption: "100 hours of stress, 3 hours of actual revision, pure survival.", photo: "/photos/seasons/16.jpg" },
     { season: 17, year: 2023, title: "Sweet Sixteen + 1", caption: "Roaming around city corners pretending to be the main character.", photo: "/photos/seasons/17.jpg" },
-    { season: 18, year: 2024, title: "Official Adult (In Theory)", caption: "Turned 18. Signed voter card. Still asked where his socks were.", photo: "/photos/seasons/18.jpg" },
-    { season: 19, year: 2025, title: "The Final Teen Chapter", caption: "Last year as a teenager. Peak chaos, legendary late-night talks.", photo: "/photos/seasons/19.jpg" }
+    { season: 18, year: 2024, title: "The Triad: Bro Code & Chaos", caption: "Janmesh, Pranay & the squad. Black shirt, waffle knit, and white tee. Navigating life, exams, and brotherhood.", photo: "/photos/seasons/18.jpg", hasRealPhoto: true },
+    { season: 19, year: 2025, title: "The Finale: Elevator Mirror Syndicate", caption: "No elevator in the city was safe from this squad. 4 friends, 100 selfies, and the crew that made the teenage finale legendary.", photo: "/photos/seasons/19.jpg", hasRealPhoto: true }
   ],
 
   // Top 10 in Pranay's Friend Circle Today
@@ -234,6 +234,33 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
 
   // 2. Deleted Scenes (Bloopers, embarrassing photos, voice notes, chat screenshots)
   deletedScenes: [
+    {
+      id: "del_baby",
+      title: "Baby Pranay: Season 1 Prototype (2007)",
+      type: "photo",
+      file: "/photos/pranay/baby-season1.jpg",
+      tag: "Baby Pranay Vault",
+      duration: "2007 Archival Cut",
+      caption: "The world premiere in 2007. Bindi on forehead, gazing at his 1st birthday cake in pure wonder. Completely innocent before discovering memes and cutting chai."
+    },
+    {
+      id: "del_squad_mirror",
+      title: "The Elevator Mirror Syndicate (Uncensored)",
+      type: "photo",
+      file: "/photos/squad/elevator-squad-heart.jpg",
+      tag: "Squad Archive",
+      duration: "S19 Golden Reel",
+      caption: "Classified proof that no elevator mirror in the city was safe from this crew. 4 friends, 1 elevator, 100 takes to get the aesthetic right."
+    },
+    {
+      id: "del_boys_night",
+      title: "The Triad: Janmesh, Pranay & Squad",
+      type: "photo",
+      file: "/photos/squad/boys-squad.jpg",
+      tag: "Brothers' Vault",
+      duration: "Midnight Archives",
+      caption: "Black shirt, waffle knit, and white tee. Standing tall through exams, midnight chai runs, and lifelong bro code."
+    },
     {
       id: "del_01",
       title: "The 2:00 AM WhatsApp Meltdown",
