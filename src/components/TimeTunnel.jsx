@@ -337,3 +337,4 @@ function TimeTunnelCard({ season, index, total, scrollYProgress, isLowEnd, onSel
     </motion.div>
   );
 }
+

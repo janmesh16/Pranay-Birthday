@@ -510,7 +510,7 @@ export function Homepage({
                     : isUnlocked ? 'border-emerald-500/40' : 'border-white/10 group-hover:border-pranay-red'
                 } transition-all duration-300 transform group-hover:scale-105 shadow-xl bg-[#14141e]`}>
                   <ImageWithFallback
-                    src={f.photo || (f.photos && f.photos[0])}
+                    src={f.photo || (f.photos && (typeof f.photos[0] === 'string' ? f.photos[0] : f.photos[0]?.url))}
                     alt={f.name}
                     fallbackTitle={f.name}
                     aspectRatio="aspect-video"
@@ -747,11 +747,23 @@ export function Homepage({
           </div>
 
           {/* Janmesh Director */}
-          <div className="snap-start-card flex-shrink-0 w-36 sm:w-44 text-center">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto mb-2 border-2 border-amber-400 shadow-glow-gold bg-[#161622] flex items-center justify-center">
-              <Sparkles className="w-12 h-12 text-amber-400" />
+          <div 
+            onClick={() => {
+              playClickSound();
+              onOpenSpecial();
+            }}
+            className="snap-start-card flex-shrink-0 w-36 sm:w-44 text-center cursor-pointer group"
+          >
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto mb-2 border-2 border-amber-400 group-hover:border-amber-300 shadow-glow-gold bg-[#161622] transition-transform duration-300 group-hover:scale-105">
+              <ImageWithFallback
+                src={CONFIG.special.photo || "/photos/janmesh/02.jpg"}
+                alt={CONFIG.special.name}
+                fallbackTitle={CONFIG.special.name}
+                aspectRatio="aspect-square"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <h4 className="text-xs sm:text-sm font-bold text-white">{CONFIG.special.name}</h4>
+            <h4 className="text-xs sm:text-sm font-bold text-white group-hover:text-amber-300 transition-colors">{CONFIG.special.name}</h4>
             <p className="text-[10px] text-amber-300 font-semibold uppercase tracking-wide">Director & Creator</p>
           </div>
 

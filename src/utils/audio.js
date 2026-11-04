@@ -318,6 +318,41 @@ export function playCardFlipSound() {
 }
 
 /**
+ * Plays a warm, gentle acoustic-style harmonic chime.
+ * Used for Janmesh's Special Episode and heartfelt moments.
+ */
+export function playWarmChime() {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // Harmonic arpeggio (Warm Pentatonic chords: C4, G4, C5, E5, B5)
+    const notes = [261.63, 392.00, 523.25, 659.25, 987.77];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const noteTime = now + (idx * 0.08);
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, noteTime);
+
+      gain.gain.setValueAtTime(0, noteTime);
+      gain.gain.linearRampToValueAtTime(0.06 / (idx + 1), noteTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 1.2);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(noteTime);
+      osc.stop(noteTime + 1.3);
+    });
+  } catch {
+    // Audio safe fallback
+  }
+}
+
+/**
  * Creates a microphone audio listener that detects blowing.
  * Blow detection watches for sustained low-frequency sound energy / high RMS amplitude.
  * Includes complete mobile Safari & Chrome permission safety.

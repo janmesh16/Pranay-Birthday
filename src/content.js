@@ -132,10 +132,30 @@ export const CONFIG = {
     name: "Janmesh Roida",
     role: "The Creator, Best Brother & Lifelong Co-Star",
     code: "JANMESH-ROIDA",
+    photo: "/photos/janmesh/02.jpg",
     photos: [
-      "/photos/janmesh/01.jpg",
-      "/photos/janmesh/02.jpg",
-      "/photos/janmesh/03.jpg"
+      {
+        url: "/photos/janmesh/01.jpg",
+        title: "Bappa's Blessings & Infinite Smiles",
+        subtitle: "Festive Traditions & Radiant Joy",
+        tag: "Festive Edition",
+        caption: "Standing side-by-side with Lord Ganesha's blessings. Every festival, every new beginning, always together as brothers."
+      },
+      {
+        url: "/photos/janmesh/02.jpg",
+        title: "Suited Up & Unstoppable",
+        subtitle: "Two Brothers, One Vision",
+        tag: "Dapper Duo",
+        caption: "Dressed in black, sharp as ever. From quiet planning to conquering life's biggest milestones, we move as one team."
+      },
+      {
+        url: "/photos/janmesh/03.jpg",
+        title: "The Hand-Drawn Sketch",
+        subtitle: "A Timeless Masterpiece of Us",
+        tag: "Artistic Portrait",
+        caption: "Captured in artistic strokes — an immortal hand-drawn sketch honoring 19+ years of unshakeable brotherhood.",
+        isSketch: true
+      }
     ],
     letter: `Dear Pranay,
 

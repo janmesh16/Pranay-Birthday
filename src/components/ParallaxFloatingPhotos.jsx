@@ -32,7 +32,7 @@ export function ParallaxFloatingPhotos() {
     const rawPhotos = [
       CONFIG.heroPhoto,
       ...(CONFIG.seasons || []).slice(0, 5).map(s => s.photo),
-      CONFIG.special?.photos?.[0],
+      CONFIG.special?.photo || (typeof CONFIG.special?.photos?.[0] === 'object' ? CONFIG.special?.photos?.[0]?.url : CONFIG.special?.photos?.[0]),
       CONFIG.friends?.[0]?.photo,
       CONFIG.friends?.[1]?.photo
     ].filter(Boolean);
@@ -110,3 +110,4 @@ function FloatingPhotoItem({ layer, scrollY }) {
     </motion.div>
   );
 }
+

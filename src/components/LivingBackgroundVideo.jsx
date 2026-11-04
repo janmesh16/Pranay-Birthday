@@ -117,3 +117,4 @@ export function LivingBackgroundVideo({ isPaused = false }) {
     </div>
   );
 }
+

@@ -139,7 +139,7 @@ export function FriendUnlockModal({
           <div>
             <div className="relative aspect-video w-full bg-black">
               <ImageWithFallback
-                src={friend.photo}
+                src={friend.photo || (friend.photos && (typeof friend.photos[0] === 'string' ? friend.photos[0] : friend.photos[0]?.url))}
                 alt={friend.name}
                 fallbackTitle={friend.name}
                 aspectRatio="aspect-video"
