@@ -19,13 +19,19 @@ export function FriendUnlockModal({
   if (!friend) return null;
 
   const isJanmeshSpecial = friend.id === 'janmesh';
+  const isLove = friend.isLove || friend.name?.toLowerCase() === 'sana';
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const cleanInput = code.trim().toUpperCase();
 
     // Check if matches the friend's code (or universal special code)
-    if (cleanInput === friend.code.toUpperCase() || (isJanmeshSpecial && cleanInput === 'JANMESH-ROIDA')) {
+    const isCodeMatch = cleanInput === friend.code?.toUpperCase() ||
+      (friend.aliases && friend.aliases.some(a => a.toUpperCase() === cleanInput)) ||
+      (isJanmeshSpecial && cleanInput === 'JANMESH-ROIDA') ||
+      (isLove && (cleanInput === 'SANA' || cleanInput === 'SANA-LOVE' || cleanInput === 'LOVE' || cleanInput === 'SANA20' || cleanInput === 'SANA-20'));
+
+    if (isCodeMatch) {
       playUnlockSound();
       unlockAchievement('FRIEND_CODE');
       onUnlockSuccess(friend.id);
@@ -49,7 +55,11 @@ export function FriendUnlockModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className={`relative w-full max-w-lg rounded-2xl bg-[#14141e] border ${
-          isJanmeshSpecial ? 'border-amber-500/40 shadow-glow-gold' : 'border-white/10 shadow-2xl'
+          isLove
+            ? 'border-pink-500/50 shadow-[0_0_25px_rgba(244,63,94,0.4)]'
+            : isJanmeshSpecial 
+              ? 'border-amber-500/40 shadow-glow-gold' 
+              : 'border-white/10 shadow-2xl'
         } overflow-hidden text-white`}
       >
         {/* Close Button */}
@@ -68,16 +78,20 @@ export function FriendUnlockModal({
               animate={shakeKey > 0 ? { x: [-12, 12, -8, 8, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
               className={`w-16 h-16 rounded-2xl ${
-                isJanmeshSpecial ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 'bg-pranay-red/10 border-pranay-red/30 text-pranay-red'
+                isLove
+                  ? 'bg-pink-500/10 border-pink-500/30 text-pink-400'
+                  : isJanmeshSpecial 
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
+                    : 'bg-pranay-red/10 border-pranay-red/30 text-pranay-red'
               } border flex items-center justify-center mb-5`}
             >
-              <Lock className="w-8 h-8" />
+              {isLove ? <Heart className="w-8 h-8 fill-current text-pink-400" /> : <Lock className="w-8 h-8" />}
             </motion.div>
 
             <span className={`text-[11px] font-bold tracking-widest uppercase ${
-              isJanmeshSpecial ? 'text-amber-400' : 'text-pranay-red'
+              isLove ? 'text-pink-400' : isJanmeshSpecial ? 'text-amber-400' : 'text-pranay-red'
             }`}>
-              {isJanmeshSpecial ? "Special Classified Episode" : "Friend's Vault"}
+              {isLove ? "The Special One's Episode ❤️" : isJanmeshSpecial ? "Special Classified Episode" : "Friend's Vault"}
             </span>
 
             <h3 className="text-xl sm:text-2xl font-display uppercase tracking-wide text-white mt-1 mb-2">
@@ -104,9 +118,11 @@ export function FriendUnlockModal({
               <button
                 type="submit"
                 className={`w-full py-3 px-4 rounded-xl ${
-                  isJanmeshSpecial 
-                    ? 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-extrabold'
-                    : 'bg-pranay-red hover:bg-pranay-redDark text-white'
+                  isLove
+                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold shadow-md'
+                    : isJanmeshSpecial 
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-extrabold'
+                      : 'bg-pranay-red hover:bg-pranay-redDark text-white'
                 } text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center gap-2`}
               >
                 <Unlock className="w-4 h-4" />
@@ -143,16 +159,21 @@ export function FriendUnlockModal({
                 alt={friend.name}
                 fallbackTitle={friend.name}
                 aspectRatio="aspect-video"
+                icon={isLove ? Heart : Film}
                 className="w-full h-full"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#14141e] via-transparent to-transparent" />
               
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
                 <span className={`px-2.5 py-1 rounded ${
-                  isJanmeshSpecial ? 'bg-amber-500 text-black font-extrabold' : 'bg-pranay-red text-white font-bold'
+                  isLove
+                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white font-bold shadow-md'
+                    : isJanmeshSpecial 
+                      ? 'bg-amber-500 text-black font-extrabold' 
+                      : 'bg-pranay-red text-white font-bold'
                 } text-xs uppercase tracking-wider font-display flex items-center gap-1.5`}>
                   <Unlock className="w-3.5 h-3.5" />
-                  <span>Unlocked Episode</span>
+                  <span>{isLove ? "Unlocked: Sana's Love Tape ❤️" : "Unlocked Episode"}</span>
                 </span>
                 <span className="text-xs text-gray-300 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm">
                   {friend.role}
@@ -166,10 +187,10 @@ export function FriendUnlockModal({
               </h3>
               <p className="text-xs text-gray-300 mb-4">{friend.role}</p>
 
-              <div className="p-4 rounded-xl bg-white/[0.04] border border-white/5 my-3">
-                <p className="text-xs uppercase text-pranay-red font-semibold tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5 text-pranay-red fill-current" />
-                  <span>Birthday Message to Pranay</span>
+              <div className={`p-4 rounded-xl ${isLove ? 'bg-pink-950/20 border-pink-500/30' : 'bg-white/[0.04] border-white/5'} border my-3`}>
+                <p className={`text-xs uppercase ${isLove ? 'text-pink-400' : 'text-pranay-red'} font-semibold tracking-wider mb-1.5 flex items-center gap-1.5`}>
+                  <Heart className={`w-3.5 h-3.5 ${isLove ? 'text-pink-400' : 'text-pranay-red'} fill-current`} />
+                  <span>{isLove ? "Special Birthday Wish to Pranay" : "Birthday Message to Pranay"}</span>
                 </p>
                 <p className="text-sm leading-relaxed text-gray-200 italic whitespace-pre-line">
                   "{friend.message || friend.letter}"
@@ -177,14 +198,15 @@ export function FriendUnlockModal({
               </div>
 
               {friend.video && (
-                <div className="mt-4 rounded-xl overflow-hidden border border-white/10 aspect-video bg-black">
+                <div className={`mt-4 rounded-xl overflow-hidden border ${isLove ? 'border-pink-500/40 shadow-[0_0_25px_rgba(244,63,94,0.3)]' : 'border-white/10'} max-h-[62vh] bg-black flex items-center justify-center`}>
                   <video 
                     src={friend.video} 
                     controls 
+                    autoPlay
                     playsInline
                     webkit-playsinline="true"
                     preload="metadata"
-                    className="w-full h-full object-contain" 
+                    className="w-full max-h-[62vh] object-contain rounded-xl" 
                   />
                 </div>
               )}

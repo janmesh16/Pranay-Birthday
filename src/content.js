@@ -89,6 +89,17 @@ export const CONFIG = {
   // Friends' Episodes (Locked behind secret codes)
   friends: [
     {
+      id: "friend_sana",
+      name: "Sana",
+      role: "The One & Only ❤️ (Love of His Life)",
+      code: "SANA",
+      aliases: ["SANA", "SANA-LOVE", "LOVE", "SANA20", "SANA-20"],
+      photo: "/photos/friends/sana.jpg",
+      message: "Happy 20th Birthday, Pranay! ❤️ Wishing you all the love, happiness, laughter, and success in the world. Watching you grow into this incredible person has been so special. May Season 20 bring you endless smiles and everything you dream of!",
+      video: "/video/sana.mp4",
+      isLove: true
+    },
+    {
       id: "friend01",
       name: "Aryan Sharma",
       role: "The Crime Partner & Late-Night Strategist",
@@ -279,6 +290,15 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       tag: "Brothers' Reel",
       duration: "Exclusive Reel",
       caption: "Unfiltered laughter, inside jokes, and the true bond between Janmesh and Pranay live in motion."
+    },
+    {
+      id: "del_sana_reel",
+      title: "Sana: The Special Birthday Wish ❤️",
+      type: "video",
+      file: "/video/sana.mp4",
+      tag: "Sana Special",
+      duration: "Love Reel",
+      caption: "An exclusive, heartwarming birthday message and special video from Sana to Pranay for Season 20."
     },
     {
       id: "del_specs",

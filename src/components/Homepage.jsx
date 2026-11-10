@@ -491,6 +491,7 @@ export function Homepage({
           {allFriendCards.map((f) => {
             const isUnlocked = unlockedFriends.includes(f.id);
             const isSpecial = f.id === 'janmesh';
+            const isLove = f.isLove || f.name?.toLowerCase() === 'sana';
 
             return (
               <div
@@ -505,15 +506,18 @@ export function Homepage({
                 className="snap-start-card flex-shrink-0 w-48 sm:w-60 group cursor-pointer"
               >
                 <div className={`relative aspect-video rounded-xl overflow-hidden border ${
-                  isSpecial 
-                    ? 'border-amber-500/50 shadow-glow-gold' 
-                    : isUnlocked ? 'border-emerald-500/40' : 'border-white/10 group-hover:border-pranay-red'
+                  isLove
+                    ? 'border-pink-500/60 shadow-[0_0_20px_rgba(244,63,94,0.35)]'
+                    : isSpecial 
+                      ? 'border-amber-500/50 shadow-glow-gold' 
+                      : isUnlocked ? 'border-emerald-500/40' : 'border-white/10 group-hover:border-pranay-red'
                 } transition-all duration-300 transform group-hover:scale-105 shadow-xl bg-[#14141e]`}>
                   <ImageWithFallback
                     src={f.photo || (f.photos && (typeof f.photos[0] === 'string' ? f.photos[0] : f.photos[0]?.url))}
                     alt={f.name}
                     fallbackTitle={f.name}
                     aspectRatio="aspect-video"
+                    icon={isLove ? Heart : Film}
                     className="w-full h-full"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -521,13 +525,15 @@ export function Homepage({
                   {/* Lock/Unlock Badge */}
                   <div className="absolute top-2.5 right-2.5">
                     {isUnlocked ? (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/80 text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm">
-                        <Unlock className="w-3 h-3" />
+                      <span className={`px-2 py-0.5 rounded-full ${
+                        isLove ? 'bg-gradient-to-r from-pink-600 to-rose-600' : 'bg-emerald-500/80'
+                      } text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm shadow-sm`}>
+                        {isLove ? <Heart className="w-3 h-3 fill-current" /> : <Unlock className="w-3 h-3" />}
                         <span>Unlocked</span>
                       </span>
                     ) : (
                       <span className={`px-2 py-0.5 rounded-full ${
-                        isSpecial ? 'bg-amber-500 text-black' : 'bg-black/80 text-white'
+                        isLove ? 'bg-pink-900/90 text-pink-200 border-pink-500/40' : isSpecial ? 'bg-amber-500 text-black' : 'bg-black/80 text-white'
                       } text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm border border-white/15`}>
                         <Lock className="w-3 h-3" />
                         <span>Locked</span>
@@ -535,8 +541,18 @@ export function Homepage({
                     )}
                   </div>
 
+                  {/* Special Loved One Banner */}
+                  {isLove && (
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-pink-600 to-rose-600 text-white text-[9px] font-extrabold uppercase tracking-wider flex items-center gap-1 shadow-md">
+                        <Heart className="w-2.5 h-2.5 fill-current" />
+                        <span>Special One ❤️</span>
+                      </span>
+                    </div>
+                  )}
+
                   {/* Special Episode Banner */}
-                  {isSpecial && (
+                  {!isLove && isSpecial && (
                     <div className="absolute top-2.5 left-2.5">
                       <span className="px-2 py-0.5 rounded bg-gradient-to-r from-amber-500 to-yellow-600 text-black text-[9px] font-extrabold uppercase tracking-wider font-display">
                         ★ Special Episode
@@ -546,7 +562,7 @@ export function Homepage({
 
                   <div className="absolute bottom-2.5 left-3 right-3">
                     <h3 className={`text-xs sm:text-sm font-bold ${
-                      isSpecial ? 'text-amber-300 font-serif' : 'text-white'
+                      isLove ? 'text-pink-300 font-sans' : isSpecial ? 'text-amber-300 font-serif' : 'text-white'
                     } line-clamp-1`}>
                       {f.name}
                     </h3>
