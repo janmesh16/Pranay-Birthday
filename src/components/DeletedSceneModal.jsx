@@ -62,7 +62,7 @@ export function DeletedSceneModal({ scene, onClose }) {
         initial={{ opacity: 0, scale: 0.94, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 20 }}
-        className="relative w-full max-w-xl bg-gradient-to-b from-[#181824] via-[#101018] to-[#0c0c12] border border-white/15 rounded-3xl overflow-hidden shadow-2xl my-auto"
+        className="relative w-full max-w-xl max-h-[92vh] overflow-y-auto no-scrollbar bg-gradient-to-b from-[#181824] via-[#101018] to-[#0c0c12] border border-white/15 rounded-3xl shadow-2xl my-auto"
       >
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-start justify-between bg-black/40">
@@ -147,15 +147,31 @@ export function DeletedSceneModal({ scene, onClose }) {
           {scene.type === 'video' && (
             <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center relative">
               {scene.file ? (
-                <video
-                  src={scene.file}
-                  controls
-                  playsInline
-                  webkit-playsinline="true"
-                  className="w-full h-full object-contain"
-                />
+                <>
+                  {/* Ambient blurred backdrop so there are no empty black bars */}
+                  <video
+                    src={scene.file}
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover filter blur-2xl opacity-40 scale-110 pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+
+                  {/* Centered video keeping its natural shape */}
+                  <video
+                    src={scene.file}
+                    controls
+                    autoPlay
+                    playsInline
+                    webkit-playsinline="true"
+                    preload="metadata"
+                    className="relative z-10 w-full h-full object-contain"
+                  />
+                </>
               ) : (
-                <div className="text-center p-6">
+                <div className="text-center p-6 relative z-10">
                   <Film className="w-12 h-12 text-pranay-red mx-auto mb-2 animate-pulse" />
                   <p className="text-xs text-gray-300">
                     Blooper video placeholder (upload <code className="text-pranay-red bg-white/5 px-1 py-0.5 rounded">{scene.file}</code>)

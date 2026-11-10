@@ -54,18 +54,18 @@ export function FriendUnlockModal({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className={`relative w-full max-w-lg rounded-2xl bg-[#14141e] border ${
+        className={`relative w-full max-w-lg max-h-[92vh] overflow-y-auto no-scrollbar rounded-2xl bg-[#14141e] border ${
           isLove
             ? 'border-pink-500/50 shadow-[0_0_25px_rgba(244,63,94,0.4)]'
             : isJanmeshSpecial 
               ? 'border-amber-500/40 shadow-glow-gold' 
               : 'border-white/10 shadow-2xl'
-        } overflow-hidden text-white`}
+        } text-white`}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+          className="absolute top-4 right-4 z-30 w-8 h-8 rounded-full bg-black/70 hover:bg-black/95 flex items-center justify-center text-white/80 hover:text-white transition-colors border border-white/10"
         >
           <X className="w-4 h-4" />
         </button>
@@ -153,63 +153,100 @@ export function FriendUnlockModal({
         ) : (
           /* UNLOCKED STATE */
           <div>
-            <div className="relative aspect-video w-full bg-black">
-              <ImageWithFallback
-                src={friend.photo || (friend.photos && (typeof friend.photos[0] === 'string' ? friend.photos[0] : friend.photos[0]?.url))}
-                alt={friend.name}
-                fallbackTitle={friend.name}
-                aspectRatio="aspect-video"
-                icon={isLove ? Heart : Film}
-                className="w-full h-full"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#14141e] via-transparent to-transparent" />
-              
-              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
-                <span className={`px-2.5 py-1 rounded ${
-                  isLove
-                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white font-bold shadow-md'
-                    : isJanmeshSpecial 
-                      ? 'bg-amber-500 text-black font-extrabold' 
-                      : 'bg-pranay-red text-white font-bold'
-                } text-xs uppercase tracking-wider font-display flex items-center gap-1.5`}>
-                  <Unlock className="w-3.5 h-3.5" />
-                  <span>{isLove ? "Unlocked: Sana's Love Tape ❤️" : "Unlocked Episode"}</span>
-                </span>
-                <span className="text-xs text-gray-300 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm">
-                  {friend.role}
-                </span>
-              </div>
-            </div>
+            {/* Top Media: Video or Photo Banner in Clean Rectangle Shape */}
+            <div className="relative aspect-video w-full bg-black overflow-hidden border-b border-white/10 flex items-center justify-center">
+              {friend.video ? (
+                <>
+                  {/* Ambient blurred backdrop so there are no empty black bars */}
+                  <video
+                    src={friend.video}
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover filter blur-2xl opacity-40 scale-110 pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
-            <div className="p-6">
-              <h3 className="text-2xl font-display uppercase tracking-wide text-white mb-1">
-                {friend.name}
-              </h3>
-              <p className="text-xs text-gray-300 mb-4">{friend.role}</p>
-
-              <div className={`p-4 rounded-xl ${isLove ? 'bg-pink-950/20 border-pink-500/30' : 'bg-white/[0.04] border-white/5'} border my-3`}>
-                <p className={`text-xs uppercase ${isLove ? 'text-pink-400' : 'text-pranay-red'} font-semibold tracking-wider mb-1.5 flex items-center gap-1.5`}>
-                  <Heart className={`w-3.5 h-3.5 ${isLove ? 'text-pink-400' : 'text-pranay-red'} fill-current`} />
-                  <span>{isLove ? "Special Birthday Wish to Pranay" : "Birthday Message to Pranay"}</span>
-                </p>
-                <p className="text-sm leading-relaxed text-gray-200 italic whitespace-pre-line">
-                  "{friend.message || friend.letter}"
-                </p>
-              </div>
-
-              {friend.video && (
-                <div className={`mt-4 rounded-xl overflow-hidden border ${isLove ? 'border-pink-500/40 shadow-[0_0_25px_rgba(244,63,94,0.3)]' : 'border-white/10'} max-h-[62vh] bg-black flex items-center justify-center`}>
-                  <video 
-                    src={friend.video} 
-                    controls 
+                  {/* Centered video keeping its natural shape */}
+                  <video
+                    src={friend.video}
+                    controls
                     autoPlay
                     playsInline
                     webkit-playsinline="true"
                     preload="metadata"
-                    className="w-full max-h-[62vh] object-contain rounded-xl" 
+                    className="relative z-10 w-full h-full object-contain"
                   />
+                </>
+              ) : (
+                <>
+                  <ImageWithFallback
+                    src={friend.photo || (friend.photos && (typeof friend.photos[0] === 'string' ? friend.photos[0] : friend.photos[0]?.url))}
+                    alt={friend.name}
+                    fallbackTitle={friend.name}
+                    aspectRatio="aspect-video"
+                    icon={isLove ? Heart : Film}
+                    className="w-full h-full"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#14141e] via-transparent to-transparent pointer-events-none" />
+                </>
+              )}
+
+              {/* Bottom Badge Bar when photo banner is shown */}
+              {!friend.video && (
+                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between pointer-events-none">
+                  <span className={`px-2.5 py-1 rounded ${
+                    isLove
+                      ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white font-bold shadow-md'
+                      : isJanmeshSpecial 
+                        ? 'bg-amber-500 text-black font-extrabold' 
+                        : 'bg-pranay-red text-white font-bold'
+                  } text-xs uppercase tracking-wider font-display flex items-center gap-1.5`}>
+                    <Unlock className="w-3.5 h-3.5" />
+                    <span>{isLove ? "Unlocked: Sana's Love Tape ❤️" : "Unlocked Episode"}</span>
+                  </span>
+                  <span className="text-xs text-gray-300 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm">
+                    {friend.role}
+                  </span>
                 </div>
               )}
+            </div>
+
+            <div className="p-5 sm:p-6">
+              {/* Badge when video is shown */}
+              {friend.video && (
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`px-2.5 py-1 rounded-full ${
+                    isLove
+                      ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white font-bold shadow-md'
+                      : isJanmeshSpecial 
+                        ? 'bg-amber-500 text-black font-extrabold' 
+                        : 'bg-emerald-500/80 text-white font-bold'
+                  } text-[10px] uppercase tracking-wider font-display flex items-center gap-1.5`}>
+                    <Unlock className="w-3 h-3" />
+                    <span>{isLove ? "Unlocked: Sana's Love Tape ❤️" : "Unlocked Episode"}</span>
+                  </span>
+                  <span className="text-[10px] text-gray-300 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                    {friend.role}
+                  </span>
+                </div>
+              )}
+
+              <h3 className={`text-2xl font-display uppercase tracking-wide ${isLove ? 'text-pink-300' : 'text-white'} mb-1`}>
+                {friend.name}
+              </h3>
+              <p className="text-xs text-gray-300 mb-3">{friend.role}</p>
+
+              <div className={`p-4 rounded-xl ${isLove ? 'bg-pink-950/20 border-pink-500/30' : 'bg-white/[0.04] border-white/5'} border my-3`}>
+                <p className={`text-xs uppercase ${isLove ? 'text-pink-400 font-bold' : 'text-pranay-red font-semibold'} tracking-wider mb-1.5 flex items-center gap-1.5`}>
+                  <Heart className={`w-3.5 h-3.5 ${isLove ? 'text-pink-400' : 'text-pranay-red'} fill-current`} />
+                  <span>{isLove ? "Special Birthday Wish to Pranay" : "Birthday Message to Pranay"}</span>
+                </p>
+                <p className="text-sm leading-relaxed text-gray-200 italic whitespace-pre-line font-sans">
+                  "{friend.message || friend.letter}"
+                </p>
+              </div>
 
               {isJanmeshSpecial && (
                 <button
