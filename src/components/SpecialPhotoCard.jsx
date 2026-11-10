@@ -52,7 +52,7 @@ export function SpecialPhotoCard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-5 sm:p-7 relative z-10 items-center">
             {/* Left: Cinematic Viewfinder Photo Container */}
-            <div className="lg:col-span-6 relative aspect-[2/1] rounded-2xl overflow-hidden bg-black border border-white/20 shadow-xl flex items-center justify-center group-hover:border-white/50 transition-colors">
+            <div className="lg:col-span-6 relative aspect-[2.15/1] rounded-2xl overflow-hidden bg-black border border-white/20 shadow-xl flex items-center justify-center group-hover:border-white/50 transition-colors">
               {/* Ambient Glow behind image */}
               <img 
                 src={data.photo} 
@@ -61,11 +61,11 @@ export function SpecialPhotoCard() {
               />
               <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-              {/* High-res cropped eyes photo */}
+              {/* High-res cropped eyes photo (Right side up, perfect format) */}
               <img 
                 src={data.photo} 
                 alt={data.title}
-                className="relative z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="relative z-10 w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
               />
 
               {/* Viewfinder HUD Corner Brackets */}
@@ -73,13 +73,6 @@ export function SpecialPhotoCard() {
               <div className="absolute top-2.5 right-2.5 w-4 h-4 border-r-2 border-t-2 border-white/70 pointer-events-none z-20" />
               <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-l-2 border-b-2 border-white/70 pointer-events-none z-20" />
               <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-r-2 border-b-2 border-white/70 pointer-events-none z-20" />
-
-              {/* Center Crosshair Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 opacity-40 group-hover:opacity-75 transition-opacity">
-                <div className="w-8 h-8 rounded-full border border-dashed border-white/60 flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white/80" />
-                </div>
-              </div>
 
               {/* Inspect Hover Pill */}
               <div className="absolute bottom-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -176,7 +169,7 @@ export function SpecialPhotoCard() {
 
               {/* Main Image Showcase */}
               <div className="p-5 sm:p-6">
-                <div className="relative aspect-[2/1] w-full rounded-2xl overflow-hidden bg-black border border-white/15 shadow-2xl flex items-center justify-center">
+                <div className="relative aspect-[2.15/1] w-full rounded-2xl overflow-hidden bg-black border border-white/15 shadow-2xl flex items-center justify-center">
                   {/* Ambient Backdrop */}
                   <img
                     src={data.photo}
@@ -185,11 +178,11 @@ export function SpecialPhotoCard() {
                   />
                   <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
-                  {/* Sharp Eye Photo */}
+                  {/* Sharp Eye Photo (Proper right-side up orientation) */}
                   <img
                     src={data.photo}
                     alt={data.title}
-                    className="relative z-10 w-full h-full object-cover"
+                    className="relative z-10 w-full h-full object-contain"
                   />
 
                   {/* High-tech Viewfinder Overlays */}
