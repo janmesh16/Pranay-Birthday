@@ -198,11 +198,29 @@ Season 20 is going to be your best one yet.
     videoSubtitle: "19+ Years of Brotherhood • Unfiltered & Real"
   },
 
-  // Family Profile / Mom Surprise
+  // Family Profile / Mom & Didi Surprise
   family: {
     title: "A Message from Mom & Family ❤️",
     message: "Our dearest Pranay, watching you grow into this wonderful, kind-hearted young man has been the greatest joy of our lives. May God bless you with health, endless happiness, wisdom, and success. Happy 20th Birthday, our champ!",
-    video: null
+    momVideo: "/video/family-mom.mp4",
+    didiVideo: "/video/family-didi.mp4",
+    video: "/video/family-mom.mp4",
+    videos: [
+      {
+        id: "mom",
+        title: "Mom's Blessing & Video Wish",
+        relation: "Mother",
+        video: "/video/family-mom.mp4",
+        caption: "A mother's unconditional love, infinite blessings, and sweetest wishes for Pranay's 20th birthday."
+      },
+      {
+        id: "didi",
+        title: "Didi's Special Video Wish",
+        relation: "Didi (Sister)",
+        video: "/video/family-didi.mp4",
+        caption: "From childhood fights to lifelong support — Didi's heartfelt birthday wish for her favorite brother."
+      }
+    ]
   },
 
   // Roast Subtitles (Overlaid during main trailer when Roast Mode is ON)
@@ -299,6 +317,24 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       tag: "Sana Special",
       duration: "Love Reel",
       caption: "An exclusive, heartwarming birthday message and special video from Sana to Pranay for Season 20."
+    },
+    {
+      id: "del_mom_video",
+      title: "Mom's Blessing for Season 20 ❤️",
+      type: "video",
+      file: "/video/family-mom.mp4",
+      tag: "Family Vault",
+      duration: "Mother's Love",
+      caption: "Heartfelt blessing and warm wishes from Mom as Pranay enters Season 20."
+    },
+    {
+      id: "del_didi_video",
+      title: "Didi's Birthday Wish for Pranay 🌸",
+      type: "video",
+      file: "/video/family-didi.mp4",
+      tag: "Family Vault",
+      duration: "Sister's Love",
+      caption: "A special video message from Didi celebrating 20 years of brotherhood and fun memories."
     },
     {
       id: "del_specs",

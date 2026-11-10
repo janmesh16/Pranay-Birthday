@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Flame, Users, Heart, AlertCircle, X, Film, CheckCircle } from 'lucide-react';
+import { User, Flame, Users, Heart, AlertCircle, X, Film, CheckCircle, Sparkles } from 'lucide-react';
 import { CONFIG } from '../content';
 import { playIntroSound, playErrorSound, playClickSound, unlockAudio } from '../utils/audio';
 import { unlockAchievement } from '../utils/achievements';
@@ -8,6 +8,7 @@ import { unlockAchievement } from '../utils/achievements';
 export function WhosWatching({ onSelectProfile }) {
   const [guestDenied, setGuestDenied] = useState(false);
   const [familyModalOpen, setFamilyModalOpen] = useState(false);
+  const [selectedFamilyVideo, setSelectedFamilyVideo] = useState('mom'); // 'mom' | 'didi'
   const [shakeKey, setShakeKey] = useState(0);
 
   const handlePranay = () => {
@@ -205,18 +206,63 @@ export function WhosWatching({ onSelectProfile }) {
                 </p>
               </div>
 
-              {CONFIG.family.video && (
-                <div className="mt-4 rounded-xl overflow-hidden border border-white/10 bg-black aspect-video flex items-center justify-center">
-                  <video 
-                    src={CONFIG.family.video} 
-                    controls 
-                    playsInline
-                    webkit-playsinline="true"
-                    preload="metadata"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              )}
+              {/* Mom & Didi Video Switcher */}
+              <div className="flex items-center justify-center gap-2 mb-3 bg-white/[0.04] p-1 rounded-full border border-white/10">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playClickSound();
+                    setSelectedFamilyVideo('mom');
+                  }}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                    selectedFamilyVideo === 'mom'
+                      ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-md'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Heart className="w-3.5 h-3.5 fill-current text-white" />
+                  <span>Mom's Blessing</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    playClickSound();
+                    setSelectedFamilyVideo('didi');
+                  }}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                    selectedFamilyVideo === 'didi'
+                      ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-md'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-pink-300" />
+                  <span>Didi's Wish</span>
+                </button>
+              </div>
+
+              {/* Active Video Player */}
+              <div className="mt-2 rounded-xl overflow-hidden border border-pink-500/30 bg-black max-h-[48vh] flex items-center justify-center shadow-lg">
+                <video 
+                  key={selectedFamilyVideo}
+                  src={selectedFamilyVideo === 'mom' 
+                    ? (CONFIG.family.momVideo || CONFIG.family.video)
+                    : (CONFIG.family.didiVideo || CONFIG.family.video)
+                  } 
+                  controls 
+                  autoPlay
+                  playsInline
+                  webkit-playsinline="true"
+                  preload="metadata"
+                  className="w-full max-h-[48vh] object-contain rounded-xl"
+                />
+              </div>
+
+              <div className="mt-2 text-center text-[11px] text-pink-300/80 font-mono">
+                {selectedFamilyVideo === 'mom' 
+                  ? "★ Mom's Video Blessing for Pranay" 
+                  : "★ Didi's Special Birthday Wish for Pranay"}
+              </div>
 
               <div className="mt-6 flex justify-end">
                 <button
