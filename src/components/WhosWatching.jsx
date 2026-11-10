@@ -68,7 +68,7 @@ export function WhosWatching({ onSelectProfile }) {
       name: 'Mom / Family',
       badge: 'Special Love',
       color: 'from-pink-600 to-rose-800',
-      photo: '/photos/pranay/baby-season1.jpg',
+      photo: CONFIG.family?.photo || '/photos/pranay/mom-swag.jpg',
       icon: Heart,
       action: handleFamily,
       glow: 'hover:shadow-[0_0_25px_rgba(244,63,94,0.5)] border-pink-500/40'
@@ -177,30 +177,34 @@ export function WhosWatching({ onSelectProfile }) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-full max-w-lg rounded-2xl bg-[#14141e] border border-pink-500/30 p-6 text-white shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto no-scrollbar rounded-2xl bg-[#14141e] border border-pink-500/30 p-5 sm:p-6 text-white shadow-2xl"
             >
-              <div className="absolute top-0 right-0 p-4">
+              <div className="absolute top-0 right-0 p-4 z-20">
                 <button
                   onClick={() => setFamilyModalOpen(false)}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                  className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 flex items-center justify-center text-gray-300 hover:text-white transition-colors border border-white/10"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-pink-600 to-rose-500 flex items-center justify-center text-white shadow-lg">
-                  <Heart className="w-6 h-6 fill-current" />
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-600 to-rose-500 flex items-center justify-center text-white shadow-lg overflow-hidden border border-pink-400/30 flex-shrink-0">
+                  {CONFIG.family.photo ? (
+                    <img src={CONFIG.family.photo} alt="Mom & Pranay" className="w-full h-full object-cover" />
+                  ) : (
+                    <Heart className="w-6 h-6 fill-current" />
+                  )}
                 </div>
                 <div>
                   <h3 className="text-xl font-display uppercase tracking-wider text-pink-400">
                     {CONFIG.family.title || "From Mom & Family"}
                   </h3>
-                  <p className="text-xs text-gray-400">Special Birthday Message</p>
+                  <p className="text-xs text-gray-400">Special Birthday Message & Unfiltered Swag</p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 my-4">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 my-3">
                 <p className="text-sm leading-relaxed text-gray-200 whitespace-pre-line italic">
                   "{CONFIG.family.message}"
                 </p>
@@ -241,8 +245,23 @@ export function WhosWatching({ onSelectProfile }) {
                 </button>
               </div>
 
-              {/* Active Video Player */}
-              <div className="mt-2 rounded-xl overflow-hidden border border-pink-500/30 bg-black max-h-[48vh] flex items-center justify-center shadow-lg">
+              {/* Active Video Player with Clean 16:9 Rectangle Frame & Ambient Glow */}
+              <div className="mt-2 w-full aspect-video rounded-xl overflow-hidden border border-pink-500/30 bg-black flex items-center justify-center shadow-lg relative">
+                {/* Ambient blurred backdrop so there are no empty black bars */}
+                <video
+                  key={`bg-${selectedFamilyVideo}`}
+                  src={selectedFamilyVideo === 'mom' 
+                    ? (CONFIG.family.momVideo || CONFIG.family.video)
+                    : (CONFIG.family.didiVideo || CONFIG.family.video)
+                  }
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover filter blur-2xl opacity-40 scale-110 pointer-events-none"
+                />
+                <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+
                 <video 
                   key={selectedFamilyVideo}
                   src={selectedFamilyVideo === 'mom' 
@@ -254,7 +273,7 @@ export function WhosWatching({ onSelectProfile }) {
                   playsInline
                   webkit-playsinline="true"
                   preload="metadata"
-                  className="w-full max-h-[48vh] object-contain rounded-xl"
+                  className="relative z-10 w-full h-full object-contain"
                 />
               </div>
 

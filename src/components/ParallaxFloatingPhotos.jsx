@@ -27,30 +27,32 @@ export function ParallaxFloatingPhotos() {
 
   const { scrollY } = useScroll();
 
-  // Gather up to 8 photo layers from CONFIG
+  // Gather up to 10 photo layers from CONFIG
   const photoLayers = useMemo(() => {
     const rawPhotos = [
       CONFIG.seasons?.[0]?.photo, // Baby Pranay (2007)
+      "/photos/pranay/beach-shack.jpg", // Beach king in red bandana
+      "/photos/pranay/mom-swag.jpg", // Mom & Pranay shades
       CONFIG.seasons?.[18]?.photo, // Squad Elevator Mirror (2025)
-      CONFIG.seasons?.[17]?.photo, // Boys Triad (2024)
+      "/photos/pranay/festive-bandana.jpg", // Festive street swag
       CONFIG.special?.photo || "/photos/janmesh/02.jpg", // Suited up Janmesh & Pranay
-      "/photos/janmesh/01.jpg", // Festive Janmesh & Pranay with Bappa
+      "/photos/pranay/beach-sunset.jpg", // Sunset silhouette
       "/photos/pranay/bike-hero.jpg", // Pranay on blue bike
       "/photos/pranay/specs-aesthetic.jpg", // Vintage aesthetic glasses
-      "/photos/pranay/traditional-mandap.jpg" // Traditional Ganpati mandap
+      "/photos/pranay/bw-artistic.jpg" // Intense monochrome portrait
     ].filter(Boolean);
 
-    // Take max 8 unique items
-    const selected = Array.from(new Set(rawPhotos)).slice(0, 8);
+    // Take max 10 unique items
+    const selected = Array.from(new Set(rawPhotos)).slice(0, 10);
 
     // Pre-calculate positions & speeds
     return selected.map((photo, i) => {
-      const topPercent = 12 + i * 11; // 12%, 23%, 34%, 45%, 56%, 67%, 78%, 89%
+      const topPercent = 8 + i * 9.2;
       const isLeft = i % 2 === 0;
       const horizontalPercent = isLeft ? 2 + (i % 3) * 2 : 82 + (i % 3) * 2;
-      const speed = (i % 2 === 0 ? 1 : -1) * (60 + (i * 20)); // -140px to +140px offset
-      const size = 110 + (i % 3) * 35; // 110px to 180px
-      const rot = (i % 2 === 0 ? -1 : 1) * (4 + (i * 2)); // -14deg to +14deg
+      const speed = (i % 2 === 0 ? 1 : -1) * (50 + (i * 15));
+      const size = 110 + (i % 3) * 35;
+      const rot = (i % 2 === 0 ? -1 : 1) * (4 + (i * 2));
 
       return {
         id: `float_${i}`,

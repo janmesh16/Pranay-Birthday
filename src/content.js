@@ -36,11 +36,11 @@ export const CONFIG = {
   // 19 Seasons (One per year of his life: 2007 to 2025)
   seasons: [
     { season: 1, year: 2007, title: "Pilot: Baby Pranay & The 1st Cake", caption: "The world premiere of Pranay in 2007. Adorned with the iconic bindi, gazing at his birthday cake in pure wonder. The legend begins.", photo: "/photos/seasons/01.jpg", hasRealPhoto: true },
-    { season: 2, year: 2008, title: "Learning to Walk (and Fall)", caption: "Discovered gravity the hard way. First official temper tantrums.", photo: "/photos/seasons/02.jpg" },
-    { season: 3, year: 2009, title: "The Terrible Threes", caption: "Mastered the word 'NO' and used it weapon-grade.", photo: "/photos/seasons/03.jpg" },
-    { season: 4, year: 2010, title: "Kindergarten Chronicles", caption: "Trading crayon secrets and pretending nap time was torture.", photo: "/photos/seasons/04.jpg" },
-    { season: 5, year: 2011, title: "Primary School Hustle", caption: "Heavy schoolbag, five notebooks, zero homework done.", photo: "/photos/seasons/05.jpg" },
-    { season: 6, year: 2012, title: "The Apocalyptic Imagination", caption: "Thought the world was ending in 2012. Survived just to eat Maggi.", photo: "/photos/seasons/06.jpg" },
+    { season: 2, year: 2008, title: "Sunset Horizon: The Shoreline Silhouette", caption: "Standing in the rolling ocean waves under a golden twilight sky. Contemplating life's greatest mysteries (like why bedtime exists).", photo: "/photos/seasons/02.jpg", hasRealPhoto: true },
+    { season: 3, year: 2009, title: "Coastal Royalty: Beach Shack Chill", caption: "Red bandana, dark shades, shell necklace, and lounging like the undisputed king of the coast. Vacation mode unlocked.", photo: "/photos/seasons/03.jpg", hasRealPhoto: true },
+    { season: 4, year: 2010, title: "Monochrome Gaze: The Intense Brood", caption: "Artistic black and white photography, tousled hair, and an intense soulful expression that would put runway models to shame.", photo: "/photos/seasons/04.jpg", hasRealPhoto: true },
+    { season: 5, year: 2011, title: "Street Swag: The Bandana & Shades Arc", caption: "Black patterned bandana, tinted shades, and festive street energy. Walking through the city like a local superstar.", photo: "/photos/seasons/05.jpg", hasRealPhoto: true },
+    { season: 6, year: 2012, title: "The Unbothered Duo: Mom & Pranay's Shades Arc", caption: "Rocking matching black 'I Don't Care' sunglasses with Mom. Blessed with maternal love, unmatched genetics, and zero stress.", photo: "/photos/seasons/06.jpg", hasRealPhoto: true },
     { season: 7, year: 2013, title: "The Old Soul: B&W Chikankari", caption: "Monochrome elegance, long embroidered kurta, and gazing thoughtfully in the mirror like a classical poet.", photo: "/photos/seasons/07.jpg", hasRealPhoto: true },
     { season: 8, year: 2014, title: "Nature & Peace: The Petting Arc", caption: "Sun-drenched rural fields, wide open skies, and gently petting a white calf. Pure peace and pastoral serenity.", photo: "/photos/seasons/08.jpg", hasRealPhoto: true },
     { season: 9, year: 2015, title: "The Preadolescent Sass", caption: "Developing comebacks that didn't make sense, but delivered with confidence.", photo: "/photos/seasons/09.jpg" },
@@ -73,7 +73,9 @@ export const CONFIG = {
   // Continue Watching
   continueWatching: [
     { title: "Adulting: The Struggle", progress: 3, season: "S20:E1", duration: "48m remaining", photo: "/photos/pranay/bike-hero.jpg" },
+    { title: "Beach King & Sunset Chill", progress: 92, season: "S3:E2", duration: "Goa Chronicles", photo: "/photos/pranay/beach-shack.jpg" },
     { title: "Hitting the Gym (Gains Arc)", progress: 78, season: "S11:E4", duration: "Bulking Phase", photo: "/photos/pranay/gym-physique.jpg" },
+    { title: "Mom's Swag: The 'I Don't Care' Era", progress: 65, season: "S6:E1", duration: "Matching Shades", photo: "/photos/pranay/mom-swag.jpg" },
     { title: "Village Peace & Cow Petting", progress: 42, season: "S8:E3", duration: "24m remaining", photo: "/photos/pranay/nature-calf.jpg" },
     { title: "Replying to Texts Promptly", progress: 1, season: "S1:E1", duration: "Failed to load", photo: "/photos/pranay/specs-aesthetic.jpg" }
   ],
@@ -202,6 +204,7 @@ Season 20 is going to be your best one yet.
   family: {
     title: "A Message from Mom & Family ❤️",
     message: "Our dearest Pranay, watching you grow into this wonderful, kind-hearted young man has been the greatest joy of our lives. May God bless you with health, endless happiness, wisdom, and success. Happy 20th Birthday, our champ!",
+    photo: "/photos/pranay/mom-swag.jpg",
     momVideo: "/video/family-mom.mp4",
     didiVideo: "/video/family-didi.mp4",
     video: "/video/family-mom.mp4",
@@ -267,12 +270,59 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
     secretPhotos: [
       "/photos/directors-cut/01.jpg",
       "/photos/directors-cut/02.jpg",
-      "/photos/directors-cut/03.jpg"
+      "/photos/directors-cut/03.jpg",
+      "/photos/directors-cut/04.jpg",
+      "/photos/directors-cut/05.jpg"
     ]
   },
 
   // 2. Deleted Scenes (Bloopers, embarrassing photos, voice notes, chat screenshots)
   deletedScenes: [
+    {
+      id: "del_mom_swag",
+      title: "Mom & Pranay: The 'I Don't Care' Syndicate",
+      type: "photo",
+      file: "/photos/pranay/mom-swag.jpg",
+      tag: "Family Swag",
+      duration: "Matching Shades",
+      caption: "Matching black 'I Don't Care' shades filter with Mom! Pure swagger, endless laughs, and the coolest mother-son duo ever captured on camera."
+    },
+    {
+      id: "del_beach_shack",
+      title: "Coastal Royalty: Beach Shack Chill",
+      type: "photo",
+      file: "/photos/pranay/beach-shack.jpg",
+      tag: "Goa Chronicles",
+      duration: "Vacation Cut",
+      caption: "Red bandana, dark sunglasses, beaded chain, and relaxing on beach cushions under the yellow canopy. Undisputed king of the coastline."
+    },
+    {
+      id: "del_beach_sunset",
+      title: "Golden Hour Horizon: Sunset Silhouette",
+      type: "photo",
+      file: "/photos/pranay/beach-sunset.jpg",
+      tag: "Cinematic Reel",
+      duration: "Sunset Archives",
+      caption: "Standing at the edge of the rolling waves, gazing into the sunset. Either contemplating life's deepest secrets or wondering where the nearest bhutta stall is."
+    },
+    {
+      id: "del_festive_bandana",
+      title: "Street Legend: Bandana & Shades Arc",
+      type: "photo",
+      file: "/photos/pranay/festive-bandana.jpg",
+      tag: "Festival Swag",
+      duration: "Street Cut",
+      caption: "Black patterned bandana, tinted shades, festive orange-white jersey, and Mumbai rickshaws in the background. Pure local superstar energy."
+    },
+    {
+      id: "del_bw_artistic",
+      title: "Monochrome Gaze: The Intense Brood",
+      type: "photo",
+      file: "/photos/pranay/bw-artistic.jpg",
+      tag: "Aesthetic Vault",
+      duration: "Studio Cut",
+      caption: "Dramatic monochrome lighting, piercing gaze, and strands of hair falling across his forehead. Giving high-fashion magazine cover vibes."
+    },
     {
       id: "del_baby",
       title: "Baby Pranay: Season 1 Prototype (2007)",
