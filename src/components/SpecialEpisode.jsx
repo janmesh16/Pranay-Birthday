@@ -116,6 +116,7 @@ export function SpecialEpisode({ onClose }) {
   const photoTag = typeof currentPhoto === 'object' && currentPhoto.tag ? currentPhoto.tag : 'Keepsake';
   const photoCaption = typeof currentPhoto === 'object' && currentPhoto.caption ? currentPhoto.caption : '';
   const isSketchSlot = (typeof currentPhoto === 'object' && currentPhoto.isSketch) || photoUrl.includes('03.jpg');
+  const isVideoSlot = Boolean((typeof currentPhoto === 'object' && currentPhoto.isVideo) || (photoUrl && photoUrl.endsWith('.mp4')));
 
   return (
     <div className="fixed inset-0 z-50 bg-black text-white flex flex-col justify-between overflow-hidden select-none">
@@ -208,7 +209,7 @@ export function SpecialEpisode({ onClose }) {
               }`}
             >
               <Film className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Vault Reel</span>
+              <span>Video Reel</span>
             </button>
           )}
         </nav>
@@ -248,26 +249,28 @@ export function SpecialEpisode({ onClose }) {
 
               <div className="flex items-center gap-2">
                 {/* Ken Burns Toggle */}
-                <button
-                  onClick={() => setIsKenBurns(prev => !prev)}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all ${
-                    isKenBurns 
-                      ? 'bg-amber-500/10 border-amber-500/40 text-amber-300' 
-                      : 'bg-white/5 border-white/10 text-gray-400'
-                  }`}
-                  title="Toggle cinematic slow pan effect"
-                >
-                  {isKenBurns ? 'Ken Burns: ON' : 'Ken Burns: OFF'}
-                </button>
+                {!isVideoSlot && (
+                  <button
+                    onClick={() => setIsKenBurns(prev => !prev)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all ${
+                      isKenBurns 
+                        ? 'bg-amber-500/10 border-amber-500/40 text-amber-300' 
+                        : 'bg-white/5 border-white/10 text-gray-400'
+                    }`}
+                    title="Toggle cinematic slow pan effect"
+                  >
+                    {isKenBurns ? 'Ken Burns: ON' : 'Ken Burns: OFF'}
+                  </button>
+                )}
 
                 {/* Lightbox Expand */}
                 <button
                   onClick={() => setIsLightboxOpen(true)}
                   className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white flex items-center gap-1 transition-all"
-                  title="Inspect photo fullscreen without cropping"
+                  title="Inspect fullscreen"
                 >
                   <Maximize2 className="w-3 h-3" />
-                  <span>Inspect</span>
+                  <span>{isVideoSlot ? 'Fullscreen' : 'Inspect'}</span>
                 </button>
               </div>
             </div>
@@ -282,10 +285,25 @@ export function SpecialEpisode({ onClose }) {
                   exit={{ opacity: 0, scale: 1.02 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                   className="w-full h-full relative cursor-pointer"
-                  onClick={() => setIsLightboxOpen(true)}
+                  onClick={() => {
+                    if (!isVideoSlot) setIsLightboxOpen(true);
+                  }}
                 >
-                  {/* Handle 3rd sketch slot fallback gracefully if image is not yet on disk */}
-                  {isSketchSlot && sketchLoadFailed ? (
+                  {isVideoSlot ? (
+                    <div 
+                      className="w-full h-full flex items-center justify-center bg-black relative"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <video
+                        src={photoUrl}
+                        controls
+                        playsInline
+                        webkit-playsinline="true"
+                        preload="metadata"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : isSketchSlot && sketchLoadFailed ? (
                     <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#1b1712] via-[#120f0d] to-black">
                       <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400 shadow-glow-gold animate-pulse">
                         <Palette className="w-10 h-10" />
@@ -367,6 +385,7 @@ export function SpecialEpisode({ onClose }) {
                   const title = typeof item === 'object' && item.title ? item.title : `Photo ${idx + 1}`;
                   const isActive = idx === currentPhotoIdx;
                   const isSketch = (typeof item === 'object' && item.isSketch) || url.includes('03.jpg');
+                  const isItemVideo = Boolean((typeof item === 'object' && item.isVideo) || (url && url.endsWith('.mp4')));
 
                   return (
                     <button
@@ -382,7 +401,12 @@ export function SpecialEpisode({ onClose }) {
                       }`}
                       title={title}
                     >
-                      {isSketch && sketchLoadFailed ? (
+                      {isItemVideo ? (
+                        <div className="w-full h-full bg-gradient-to-tr from-amber-950 via-zinc-900 to-black flex flex-col items-center justify-center text-amber-400">
+                          <Film className="w-5 h-5 text-amber-400 animate-pulse" />
+                          <span className="text-[8px] font-mono uppercase tracking-wider text-amber-300 mt-0.5">Reel</span>
+                        </div>
+                      ) : isSketch && sketchLoadFailed ? (
                         <div className="w-full h-full bg-[#1b1712] flex items-center justify-center text-amber-400">
                           <Palette className="w-5 h-5" />
                         </div>
@@ -393,9 +417,9 @@ export function SpecialEpisode({ onClose }) {
                           className="w-full h-full object-cover" 
                         />
                       )}
-                      <div className="absolute inset-0 bg-black/30" />
-                      <span className="absolute bottom-1 left-1.5 text-[9px] font-mono font-bold text-white bg-black/70 px-1 rounded">
-                        0{idx + 1}
+                      <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+                      <span className="absolute bottom-1 left-1.5 text-[9px] font-mono font-bold text-white bg-black/70 px-1 rounded pointer-events-none">
+                        {isItemVideo ? '▶ 04' : `0${idx + 1}`}
                       </span>
                     </button>
                   );
@@ -665,17 +689,42 @@ export function SpecialEpisode({ onClose }) {
         {/* TAB 4: VAULT VIDEO (IF PRESENT)                     */}
         {/* ==================================================== */}
         {activeTab === 'video' && special.video && (
-          <div className="w-full max-w-3xl aspect-video rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-2xl bg-black my-auto">
-            <video 
-              src={special.video} 
-              controls 
-              autoPlay 
-              playsInline
-              webkit-playsinline="true"
-              preload="metadata"
-              className="w-full h-full object-contain"
-            />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-md sm:max-w-lg md:max-w-xl max-h-[75vh] flex flex-col items-center justify-center my-auto px-2"
+          >
+            {/* Header pill */}
+            <div className="flex items-center gap-2 mb-3">
+              <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <Film className="w-3.5 h-3.5 text-amber-400" />
+                <span>Janmesh & Pranay Brotherhood Reel</span>
+              </span>
+            </div>
+
+            {/* Video Player */}
+            <div className="relative w-full max-h-[66vh] rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-glow-gold bg-black flex items-center justify-center">
+              <video 
+                src={special.video} 
+                controls 
+                autoPlay 
+                playsInline
+                webkit-playsinline="true"
+                preload="metadata"
+                className="w-full max-h-[66vh] object-contain rounded-2xl"
+              />
+            </div>
+
+            <div className="mt-3 text-center">
+              <h3 className="text-sm sm:text-base font-serif font-bold text-white">
+                {special.videoTitle || "Janmesh & Pranay: The Brotherhood Reel"}
+              </h3>
+              <p className="text-xs text-amber-300/80 font-serif italic mt-0.5">
+                {special.videoSubtitle || "19+ Years of Brotherhood in Motion"}
+              </p>
+            </div>
+          </motion.div>
         )}
       </main>
 
@@ -718,7 +767,18 @@ export function SpecialEpisode({ onClose }) {
               className="relative flex-1 flex items-center justify-center my-4 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {isSketchSlot && sketchLoadFailed ? (
+              {isVideoSlot ? (
+                <div className="w-full h-full max-h-[80vh] flex items-center justify-center">
+                  <video
+                    src={photoUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    webkit-playsinline="true"
+                    className="max-h-full max-w-full object-contain rounded-xl shadow-2xl border border-amber-500/30"
+                  />
+                </div>
+              ) : isSketchSlot && sketchLoadFailed ? (
                 <div className="text-center p-6 text-amber-300">
                   <Palette className="w-16 h-16 mx-auto mb-3 opacity-60" />
                   <p className="font-serif text-lg">Hand-Drawn Sketch Chapter</p>

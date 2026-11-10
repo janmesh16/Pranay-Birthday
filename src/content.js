@@ -155,6 +155,14 @@ export const CONFIG = {
         tag: "Artistic Portrait",
         caption: "Captured in artistic strokes — an immortal hand-drawn sketch honoring 19+ years of unshakeable brotherhood.",
         isSketch: true
+      },
+      {
+        url: "/video/janmesh-pranay.mp4",
+        title: "The Brotherhood Video Reel",
+        subtitle: "Unscripted Moments & Pure Chaos",
+        tag: "Special Video",
+        caption: "Raw laughter, candid brotherhood, and unscripted memories captured live on camera. Two brothers navigating life together.",
+        isVideo: true
       }
     ],
     letter: `Dear Pranay,
@@ -174,7 +182,9 @@ I love you, brother.
 Season 20 is going to be your best one yet.
 
 — Janmesh Roida`,
-    video: null
+    video: "/video/janmesh-pranay.mp4",
+    videoTitle: "Janmesh & Pranay: The Brotherhood Reel",
+    videoSubtitle: "19+ Years of Brotherhood • Unfiltered & Real"
   },
 
   // Family Profile / Mom Surprise
@@ -260,6 +270,15 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       tag: "Brothers' Vault",
       duration: "Midnight Archives",
       caption: "Black shirt, waffle knit, and white tee. Standing tall through exams, midnight chai runs, and lifelong bro code."
+    },
+    {
+      id: "del_janmesh_reel",
+      title: "Janmesh & Pranay: The Brotherhood Reel",
+      type: "video",
+      file: "/video/janmesh-pranay.mp4",
+      tag: "Brothers' Reel",
+      duration: "Exclusive Reel",
+      caption: "Unfiltered laughter, inside jokes, and the true bond between Janmesh and Pranay live in motion."
     },
     {
       id: "del_specs",
