@@ -40,8 +40,8 @@ export const CONFIG = {
     subtitle: "The Vision of Season 20 • Classified Macro Gaze",
     tag: "Special Edition",
     badge: "Official Spotlight",
-    photo: "/photos/pranay/eyes-special-crop.jpg",
-    fullPhoto: "/photos/pranay/eyes-special.jpg",
+    photo: "/photos/pranay/eyes-special-straight.jpg",
+    fullPhoto: "/photos/pranay/eyes-special-straight.jpg",
     tagline: "The Eyes That Witnessed 19 Seasons of Chaos & Brotherhood",
     description: "They say the eyes are the window to the soul, but in Pranay's case, they're the mastermind behind 19 seasons of unscripted chaos, razor-sharp focus, and lifelong loyalty. Captured in high-contrast cinematic monochrome—piercing gaze, silver earring, and an aura that commands the room without uttering a single word. Stepping into Season 20 with 20/20 vision and zero apologies.",
     stats: [
@@ -300,7 +300,7 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
       id: "del_eyes_special",
       title: "His Special Photo: 20/20 Vision",
       type: "photo",
-      file: "/photos/pranay/eyes-special-crop.jpg",
+      file: "/photos/pranay/eyes-special-straight.jpg",
       tag: "His Special Photo",
       duration: "Macro Noir",
       caption: "High-contrast cinematic monochrome close-up of Pranay's eyes. Piercing focus, earring, and unshakeable main-character aura."
