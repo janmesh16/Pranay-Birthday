@@ -70,6 +70,13 @@ export const ACHIEVEMENTS = {
     desc: "Shared a 5-star review on the Fan Wall",
     gamerscore: "25G",
     icon: "Star"
+  },
+  SPECIAL_PHOTO: {
+    id: 'special_photo',
+    title: "20/20 Vision",
+    desc: "Inspected Pranay's classified Special Eye Photo",
+    gamerscore: "50G",
+    icon: "Eye"
   }
 };
 

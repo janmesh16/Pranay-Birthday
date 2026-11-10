@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Award, Flame, Tv, Heart, Key, Clock, Film, BarChart3, Star, Users } from 'lucide-react';
+import { Trophy, Award, Flame, Tv, Heart, Key, Clock, Film, BarChart3, Star, Users, Eye } from 'lucide-react';
 
 const ICON_MAP = {
   Trophy,
@@ -13,7 +13,8 @@ const ICON_MAP = {
   Film,
   BarChart3,
   Star,
-  Users
+  Users,
+  Eye
 };
 
 export function AchievementToast() {

@@ -39,7 +39,8 @@ export function ParallaxFloatingPhotos() {
       "/photos/pranay/beach-sunset.jpg", // Sunset silhouette
       "/photos/pranay/bike-hero.jpg", // Pranay on blue bike
       "/photos/pranay/specs-aesthetic.jpg", // Vintage aesthetic glasses
-      "/photos/pranay/bw-artistic.jpg" // Intense monochrome portrait
+      "/photos/pranay/bw-artistic.jpg", // Intense monochrome portrait
+      "/photos/pranay/eyes-special-crop.jpg" // His Special Photo - Macro Gaze
     ].filter(Boolean);
 
     // Take max 10 unique items

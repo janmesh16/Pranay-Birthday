@@ -33,6 +33,24 @@ export const CONFIG = {
     message: "Redeemable for unlimited chai, endless bro-trips, and zero adult responsibilities for the next 365 days. (Real surprise details to follow!)"
   },
 
+  // Special Photo Feature: Pranay's Eyes
+  specialPhoto: {
+    id: "pranay_eyes_special",
+    title: "His Special Photo",
+    subtitle: "The Vision of Season 20 • Classified Macro Gaze",
+    tag: "Special Edition",
+    badge: "Official Spotlight",
+    photo: "/photos/pranay/eyes-special-crop.jpg",
+    fullPhoto: "/photos/pranay/eyes-special.jpg",
+    tagline: "The Eyes That Witnessed 19 Seasons of Chaos & Brotherhood",
+    description: "They say the eyes are the window to the soul, but in Pranay's case, they're the mastermind behind 19 seasons of unscripted chaos, razor-sharp focus, and lifelong loyalty. Captured in high-contrast cinematic monochrome—piercing gaze, silver earring, and an aura that commands the room without uttering a single word. Stepping into Season 20 with 20/20 vision and zero apologies.",
+    stats: [
+      { label: "Aesthetic", value: "Pure Cinematic Noir" },
+      { label: "Focus Level", value: "100% Main Character" },
+      { label: "Clearance", value: "Classified VIP" }
+    ]
+  },
+
   // 19 Seasons (One per year of his life: 2007 to 2025)
   seasons: [
     { season: 1, year: 2007, title: "Pilot: Baby Pranay & The 1st Cake", caption: "The world premiere of Pranay in 2007. Adorned with the iconic bindi, gazing at his birthday cake in pure wonder. The legend begins.", photo: "/photos/seasons/01.jpg", hasRealPhoto: true },
@@ -278,6 +296,15 @@ Building PRANAYFLIX was our way of showing that while seasons end, the brotherho
 
   // 2. Deleted Scenes (Bloopers, embarrassing photos, voice notes, chat screenshots)
   deletedScenes: [
+    {
+      id: "del_eyes_special",
+      title: "His Special Photo: 20/20 Vision",
+      type: "photo",
+      file: "/photos/pranay/eyes-special-crop.jpg",
+      tag: "His Special Photo",
+      duration: "Macro Noir",
+      caption: "High-contrast cinematic monochrome close-up of Pranay's eyes. Piercing focus, earring, and unshakeable main-character aura."
+    },
     {
       id: "del_mom_swag",
       title: "Mom & Pranay: The 'I Don't Care' Syndicate",

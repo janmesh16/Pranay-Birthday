@@ -14,6 +14,7 @@ import { SearchModal } from './SearchModal';
 import { ReportProblemModal } from './ReportProblemModal';
 import { EasterEggModal } from './EasterEggModal';
 import { FanReviews } from './FanReviews';
+import { SpecialPhotoCard } from './SpecialPhotoCard';
 import { DeletedScenesRow } from './DeletedScenesRow';
 import { DeletedSceneModal } from './DeletedSceneModal';
 import { TimeCapsuleModal } from './TimeCapsuleModal';
@@ -655,6 +656,9 @@ export function Homepage({
           ))}
         </div>
       </section>
+
+      {/* 6.3 HIS SPECIAL PHOTO (FEATURED SPOTLIGHT CARD) */}
+      <SpecialPhotoCard />
 
       {/* 6.5 DELETED SCENES & BLOOPERS ROW */}
       <DeletedScenesRow 
